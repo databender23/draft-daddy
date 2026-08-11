@@ -12,6 +12,7 @@ import { byeCountsFor } from './lib/context';
 import { suggestPick } from './lib/suggest';
 import SettingsDrawer from './components/SettingsDrawer';
 import TopBar from './components/TopBar';
+import { useBoardKeys } from './hooks/useBoardKeys';
 import { useDraftSync, hasCreds } from './hooks/useDraftSync';
 import type { SortKey } from './lib/board';
 import { DEFAULT_SORT, defaultDirFor, matchesSearch, sortPlayers } from './lib/board';
@@ -278,37 +279,13 @@ export default function App() {
     setDismissed((prev) => prev.filter((p) => p !== pos));
   }
 
-  useEffect(() => {
-    function onKey(event: KeyboardEvent) {
-      if (settingsOpen || page !== 'draft' || view !== 'board') return;
-      const target = event.target as HTMLElement | null;
-      const tag = target?.tagName ?? '';
-      const inInput = tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT';
-      const inSearch = inInput && target?.classList.contains('search');
-      // Arrows/Enter/Esc work from the search box; letter keys never steal typing.
-      if (inInput && !inSearch) return;
-
-      if (event.key === 'ArrowDown') {
-        event.preventDefault();
-        setCursorIdx((prev) =>
-          visible.length === 0 ? null : prev === null ? 0 : Math.min(prev + 1, visible.length - 1),
-        );
-      } else if (event.key === 'ArrowUp') {
-        event.preventDefault();
-        setCursorIdx((prev) => (prev === null ? null : Math.max(0, prev - 1)));
-      } else if (event.key === 'Escape') {
-        setCursorIdx(null);
-      } else if (event.key === 'Enter' && cursorIdx !== null && visible[cursorIdx]) {
-        event.preventDefault();
-        draftPlayer(visible[cursorIdx], event.shiftKey);
-      } else if ((event.key === 'm' || event.key === 'M') && !inInput && cursorIdx !== null) {
-        if (visible[cursorIdx]) draftPlayer(visible[cursorIdx], true);
-      } else if ((event.key === 'w' || event.key === 'W') && !inInput && cursorIdx !== null) {
-        if (visible[cursorIdx]) toggleStar(visible[cursorIdx]);
-      }
-    }
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+  useBoardKeys({
+    enabled: !settingsOpen && page === 'draft' && view === 'board',
+    rows: visible,
+    cursorIdx,
+    setCursorIdx,
+    onDraft: draftPlayer,
+    onToggleStar: toggleStar,
   });
 
   const unmatched = sync.data?.unmatched ?? [];
