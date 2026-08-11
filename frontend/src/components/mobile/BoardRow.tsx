@@ -106,9 +106,13 @@ export default function BoardRow({
     setDx(Math.max(0, moveX));
   }
 
-  function onPointerUp() {
+  function onPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
     const from = start.current;
-    const committed = from !== null && locked.current && dx >= from.width * COMMIT;
+    // Measure travel from the event, not the `dx` state: on a fast flick the
+    // threshold-crossing move can be dispatched in the same task as pointerup,
+    // and the state read here would still hold the pre-flick value.
+    const travel = from === null ? 0 : event.clientX - from.x;
+    const committed = from !== null && locked.current && travel >= from.width * COMMIT;
     reset();
     if (committed) onMine(player);
   }

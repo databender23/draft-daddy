@@ -10,6 +10,9 @@ interface Props {
    *  `entries` — the summary is a sanity check against the real draft. */
   handCount: number;
   espnCount: number;
+  /** Size of the manual ∪ sync union — hand and sync can overlap, so the
+   *  headline total must NOT be handCount + espnCount. */
+  totalCount: number;
   unmatched: UnmatchedPick[];
   now: number;
   onRestore: (player: Player) => void;
@@ -33,6 +36,7 @@ export default function RemovedSheet({
   entries,
   handCount,
   espnCount,
+  totalCount,
   unmatched,
   now,
   onRestore,
@@ -41,7 +45,7 @@ export default function RemovedSheet({
   return (
     <Sheet open={open} title="Off the board" onClose={onClose}>
       <p className="removedsheet-summary">
-        {handCount + espnCount} off the board — {handCount} by hand, {espnCount} from the draft
+        {totalCount} off the board — {handCount} by hand, {espnCount} from the draft
       </p>
 
       <RemovedPanel entries={entries} espnCount={espnCount} onRestore={onRestore} now={now} />

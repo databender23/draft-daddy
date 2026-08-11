@@ -196,6 +196,7 @@ export default function BoardOverlays({
         entries={removedEntries}
         handCount={removedCount}
         espnCount={espnCount}
+        totalCount={draftedIds.size}
         unmatched={unmatched}
         now={now}
         onRestore={onUndo}

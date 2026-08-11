@@ -171,12 +171,14 @@ export default function App() {
     const rows = players.filter((player) => {
       if (dismissed.includes(player.pos)) return false;
       if (posFilter !== 'ALL' && player.pos !== posFilter) return false;
-      if (watchOnly && !starred.has(player.id)) return false;
+      // The ★ chip exists only on mobile; never let its state strand a
+      // resized-to-desktop board filtered with no visible control to clear it.
+      if (isMobile && watchOnly && !starred.has(player.id)) return false;
       if (!showDrafted && draftedIds.has(player.id)) return false;
       return matchesSearch(player, query);
     });
     return sortPlayers(rows, sort);
-  }, [players, dismissed, posFilter, watchOnly, starred, showDrafted, draftedIds, search, sort]);
+  }, [players, dismissed, posFilter, isMobile, watchOnly, starred, showDrafted, draftedIds, search, sort]);
 
   const maxVor = useMemo(
     () => players.reduce((acc, p) => Math.max(acc, p.vor ?? 0), 0),

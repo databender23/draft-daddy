@@ -244,7 +244,8 @@
   .mrow-wrap {
     background: var(--accent);
     border-bottom: 1px solid var(--line);
-    contain-intrinsic-size: 64px;
+    /* 64px row + the 1px border-bottom, or off-screen row estimates drift. */
+    contain-intrinsic-size: auto 65px;
     content-visibility: auto;
     overflow: hidden;
     position: relative;
