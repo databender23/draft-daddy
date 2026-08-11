@@ -130,7 +130,7 @@ def test_slack_once_per_session_with_rich_blocks(client, monkeypatch):
     calls = _slack_calls()
     assert len(calls) == 1
     payload = calls[0]["json"]
-    assert "Draft IQ visitor #1 today" in payload["text"]
+    assert "Draft Daddy visitor #1 today" in payload["text"]
     assert payload["attachments"][0]["color"] == "#1A9988"
     context = _context_text(payload)
     assert "✨ First visit" in context

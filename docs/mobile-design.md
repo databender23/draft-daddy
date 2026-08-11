@@ -1,4 +1,4 @@
-# Draft IQ — Mobile Layout Spec (FINAL)
+# Draft Daddy — Mobile Layout Spec (FINAL)
 
 **Scope:** responsive retrofit, `@media (max-width: 640px)`, portrait phone 375–430px. Existing 1100px breakpoint untouched (still serves tablet).
 
@@ -110,7 +110,7 @@ Page scrolls. Top chrome is `position: sticky`, dock is `position: fixed`. No ne
 ```
 ┌──────────────────────────────────────────┐
 │ ① APP BAR            48px   sticky top:0 │
-│  [icon] Draft IQ   ● live · 38   [☰]     │
+│  [icon] Draft Daddy   ● live · 38   [☰]     │
 ├──────────────────────────────────────────┤
 │ ② CHIP RAIL         44px   sticky top:48 │
 │  Sort:VOR▾│ALL 142│QB ✓│RB 1/2│WR 0/2│…  │ ← overflow-x, snap
@@ -143,7 +143,7 @@ Page scrolls. Top chrome is `position: sticky`, dock is `position: fixed`. No ne
 
 `background: var(--surface)`, `border-bottom: 1px solid var(--line)`, `z-index: 20`.
 
-- Left: `logo-icon.png` @ 26px + "Draft IQ" @ 14px/600. Brand lockup (`logo-color`/`logo-white`) and `.brand-divider` are cut — `logo-icon.png` is theme-neutral.
+- Left: `logo-icon.png` @ 26px + "Draft Daddy" @ 14px/600. Brand lockup (`logo-color`/`logo-white`) and `.brand-divider` are cut — `logo-icon.png` is theme-neutral.
 - Center-right: tappable status block, two lines — line 1 `● live · 38 picks` (reuses `.status-chip` dot + tone classes), line 2 `142 available` @ 11px `--ink-3`. Tap → **Sync sheet**. This absorbs `.counts` out of FilterBar (D3's argument wins: the counts exist to sanity-check sync against the real draft, so they belong next to sync, not next to filters).
 - Right: 44×44 `☰` → **Menu sheet**.
 

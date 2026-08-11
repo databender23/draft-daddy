@@ -78,14 +78,14 @@ runbook (refresh both tabs). Poorly-maintained implementations fail hard (Draft 
 2.2★, "sync stops mid draft"). ToS posture: gray area, openly tolerated for 8+ years,
 no known enforcement; keep it personal-use / user's-own-cookies.
 
-## Options, ranked for Draft IQ
+## Options, ranked for Draft Daddy
 
 ### Option A — WebSocket tap via userscript/extension (RECOMMENDED)
 
 A tiny Tampermonkey userscript (or MV3 extension) that patches `window.WebSocket` at
 `document-start` in the ESPN draft-room tab, watches `SELECTED` frames, and POSTs
-`{league_id, season, picks:[{playerId, teamId, overallPick}]}` to a new Draft IQ endpoint.
-Draft IQ frontend polls that endpoint (or the existing sync flow reads the buffer) and
+`{league_id, season, picks:[{playerId, teamId, overallPick}]}` to a new Draft Daddy endpoint.
+Draft Daddy frontend polls that endpoint (or the existing sync flow reads the buffer) and
 removes players.
 
 - Sub-second latency, ESPN **playerIds** (not names — plugs straight into our existing

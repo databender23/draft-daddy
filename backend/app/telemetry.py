@@ -194,7 +194,7 @@ async def _slack_ping(body: dict, ip: str, user_agent: str, first_visit: bool) -
                     "type": "section",
                     "text": {
                         "type": "mrkdwn",
-                        "text": f"🏈 *Draft IQ Visitor* | *#{count}* today",
+                        "text": f"🏈 *Draft Daddy Visitor* | *#{count}* today",
                     },
                 },
                 {
@@ -214,7 +214,7 @@ async def _slack_ping(body: dict, ip: str, user_agent: str, first_visit: bool) -
             await client.post(
                 webhook,
                 json={
-                    "text": f"🏈 Draft IQ visitor #{count} today",
+                    "text": f"🏈 Draft Daddy visitor #{count} today",
                     "attachments": [{"color": "#1A9988", "blocks": blocks}],
                 },
             )

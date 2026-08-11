@@ -87,7 +87,7 @@ async def yahoo_callback(request: Request, code: str = "", error: str = ""):
         except ESPNError as exc:
             payload = {"type": "yahoo-auth", "ok": False, "error": exc.detail}
 
-    # postMessage is locked to this origin, so only the Draft IQ tab that
+    # postMessage is locked to this origin, so only the Draft Daddy tab that
     # opened the popup can receive the tokens.
     html = f"""<!doctype html><meta charset="utf-8"><title>Yahoo sign-in</title>
 <body style="font-family:sans-serif;padding:2rem">

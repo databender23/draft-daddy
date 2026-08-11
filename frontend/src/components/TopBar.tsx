@@ -76,7 +76,7 @@ export default function TopBar({
           alt="Databender"
         />
         <span className="brand-divider" aria-hidden="true" />
-        <span className="brand-name">Draft IQ</span>
+        <span className="brand-name">Draft Daddy</span>
       </div>
 
       <nav className="topnav" aria-label="Pages">

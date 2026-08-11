@@ -30,7 +30,7 @@ export default function MobileAppBar({
     <header className="mbar">
       <button type="button" className="mbar-brand" onClick={onScrollTop} aria-label="Scroll to top">
         <img className="mbar-logo" src="/images/logo-icon.png" alt="" />
-        <span className="mbar-name">Draft IQ</span>
+        <span className="mbar-name">Draft Daddy</span>
       </button>
 
       <button type="button" className="mbar-status" onClick={onOpenSync} aria-label="Sync status">

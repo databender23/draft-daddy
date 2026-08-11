@@ -1,4 +1,4 @@
-# Fantasy Football Draft App
+# Draft Daddy — Fantasy Football Draft App
 
 A VOR (Value Over Replacement) draft board for live fantasy football drafts, with optional
 league sync that removes players from the board as they come off it.

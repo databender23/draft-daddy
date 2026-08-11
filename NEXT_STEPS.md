@@ -1,7 +1,7 @@
 # Next steps & pending tasks
 
 Status as of 2026-08-06. The app is live at https://draftiq.databender.co (App Runner,
-analytics + Slack pings wired, Databender light/dark branding, Draft IQ name + OG tags).
+analytics + Slack pings wired, Databender light/dark branding, Draft Daddy name + OG tags).
 
 ## Before draft day (highest priority)
 
@@ -28,7 +28,7 @@ analytics + Slack pings wired, Databender light/dark branding, Draft IQ name + O
 - [ ] LinkedIn post: run https://draftiq.databender.co through linkedin.com/post-inspector
       first to prime the OG card cache; use `?utm_source=linkedin` in the shared link so
       Slack pings and the analytics dashboard attribute traffic correctly.
-- [ ] Decide whether the marketing site should link to Draft IQ after all (currently no
+- [ ] Decide whether the marketing site should link to Draft Daddy after all (currently no
       link by choice — revisit given the lead-magnet strategy).
 
 ## Yahoo — TABLED (2026-08-07: user has no Yahoo account)
@@ -67,10 +67,27 @@ app or to test against. Nothing to do unless that changes. To pick it back up:
       one-line filter in `backend/app/players.py` if wanted).
 - [ ] Telemetry returning-visitor memory resets on container restart (in-memory by design);
       fine for now, note if visitor counts ever matter.
-- [ ] Mobile/tablet layout pass (board is desktop-first; draft parties happen on laptops,
-      but the LinkedIn crowd will open it on phones).
-- [ ] Consider git-initializing this repo (it isn't one) — enables /code-review, history,
-      and rollback for next season's changes.
+- [x] Mobile layout — DONE 2026-08-10 (spec: `docs/mobile-design.md`; needs real-phone
+      testing, esp. the swipe gesture and keyboard-pinned search).
+- [x] Git repo — DONE 2026-08-10: public at github.com/databender23/draft-daddy.
+
+## Draft Daddy rename follow-ups (renamed from "Draft IQ" 2026-08-11)
+
+In-app strings, docs, Slack ping, userscript display name (v0.2.0), and the GitHub repo are
+renamed. Still pointing at the OLD name (all functional, change only as a coordinated move):
+
+- [ ] Domain: draftiq.databender.co is the live App Runner custom domain. If moving to
+      draftdaddy.databender.co: ACM cert + Route 53 CNAMEs (runbook §DNS), update og:url +
+      og:image URLs in index.html, userscript DEFAULT_ENDPOINT + @namespace, Yahoo redirect
+      URI (if/when Yahoo app exists), docs. Keep the old CNAME as a redirect if possible.
+- [ ] OG share image: frontend/public/images/og-draftiq.png has the old wordmark baked into
+      its pixels — regenerate (and consider renaming the file when the domain moves).
+- [ ] Userscript path /tap/draftiq-espn-tap.user.js: renaming the file touches the
+      Dockerfile COPY, main.py mount, SettingsDrawer + HelpPage copy, userscript README.
+      Existing Tampermonkey installs keep their saved config (localStorage key unchanged).
+- [ ] Blog draft ../website_dev/content-review/30-blog-draft-iq-2026.md still says Draft IQ
+      throughout — update before approving/publishing.
+- [ ] Redeploy App Runner so production shows the new name.
 
 ## Each August (seasonal runbook)
 

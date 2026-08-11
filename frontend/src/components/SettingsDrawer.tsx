@@ -217,7 +217,7 @@ export default function SettingsDrawer({
                   ? 'Yahoo sync is not configured on this server (needs YAHOO_CLIENT_ID / YAHOO_CLIENT_SECRET).'
                   : draft.yahooRefreshToken
                     ? '✓ Connected. Yahoo publishes picks through its official API during the draft, so no userscript is needed — set your league ID below and turn Live on.'
-                    : 'Sign in with Yahoo to let Draft IQ read your league. The sign-in token stays in this browser, exactly like the ESPN cookies.'}
+                    : 'Sign in with Yahoo to let Draft Daddy read your league. The sign-in token stays in this browser, exactly like the ESPN cookies.'}
               </p>
             </div>
           )}
@@ -348,7 +348,7 @@ export default function SettingsDrawer({
                 ? 'Optional for Yahoo — its API already reports picks live. Only useful if you also want draft-room-side relaying.'
                 : 'Real-time picks straight from the draft room.'}{' '}
               Install the tap userscript (Tampermonkey, then open{' '}
-              <code>/tap/draftiq-espn-tap.user.js</code> on this server), click the IQ badge in
+              <code>/tap/draftiq-espn-tap.user.js</code> on this server), click the DD badge in
               the draft room, and paste this key. Picks then land here in seconds — with polling
               and manual Remove as fallbacks. Keep the key private: anyone holding it could feed
               this board fake picks.

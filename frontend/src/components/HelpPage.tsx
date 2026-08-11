@@ -38,7 +38,7 @@ function MobileGestures() {
         and hiding or restoring positions. Tap the active sort key again to flip direction.
       </li>
       <li>
-        <strong>Scroll back to the top:</strong> tap <strong>Draft IQ</strong> in the top bar.
+        <strong>Scroll back to the top:</strong> tap <strong>Draft Daddy</strong> in the top bar.
       </li>
     </>
   );

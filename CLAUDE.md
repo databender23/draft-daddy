@@ -1,4 +1,4 @@
-# Databender Draft IQ (fantasy football VOR draft app)
+# Databender Draft Daddy (fantasy football VOR draft app)
 
 Draft-day web app: VOR (value-over-replacement) player board from ffanalytics projections, with
 live draft sync that removes players as they're picked. Built manual-first — every removal
@@ -196,7 +196,7 @@ purity plus both-blocks var coverage — and must pass before any UI change ship
   `session_id`, in-memory 6h TTL dedupe — no DB, consistent with the stateless design). Both are
   best-effort with short timeouts; failures are logged, never surfaced.
 - Telemetry carries no PII and must never touch ESPN cookie state.
-- Branding: the app is "Draft IQ" (TopBar wordmark, page title, OG tags in index.html with the
+- Branding: the app is "Draft Daddy" (TopBar wordmark, page title, OG tags in index.html with the
   share image at frontend/public/images/og-draftiq.png). A blog post draft promoting it lives at
   ../../website_dev/content-review/30-blog-draft-iq-2026.md (incl. the animated diagram) —
   wire into the site's blog-data.ts only after user approval.

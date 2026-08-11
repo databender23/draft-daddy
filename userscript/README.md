@@ -1,6 +1,6 @@
-# Draft IQ — ESPN Draft Tap (userscript)
+# Draft Daddy — ESPN Draft Tap (userscript)
 
-Relays picks from ESPN's live draft room to the Draft IQ board in real time.
+Relays picks from ESPN's live draft room to the Draft Daddy board in real time.
 ESPN's league read API does **not** stream picks mid-draft (see
 `../docs/live-draft-sync-research.md`); the draft room itself talks to
 `wss://fantasydraft.espn.com` over a plain-text protocol. This userscript wraps
@@ -17,13 +17,13 @@ ESPN and never drafts for you.
 2. Open `https://draftiq.databender.co/tap/draftiq-espn-tap.user.js` —
    Tampermonkey will offer to install it. (Local dev:
    `http://localhost:8000/tap/draftiq-espn-tap.user.js`.)
-3. In Draft IQ → **Settings → Live draft tap**, copy the tap key.
+3. In Draft Daddy → **Settings → Live draft tap**, copy the tap key.
 4. Open your ESPN draft room. Click the small **IQ** badge (bottom-right),
    paste the tap key, and confirm the league/season. The badge turns teal and
    counts picks as it relays them.
 
 The board picks tap events up through the normal Live sync poll — turn **Live**
-on in Draft IQ and picks disappear from the board seconds after they're made.
+on in Draft Daddy and picks disappear from the board seconds after they're made.
 
 ## Practicing in the ESPN mock draft lobby
 
@@ -33,7 +33,7 @@ protocol** but a throwaway lobby league id, so:
 1. In the mock room, click the IQ badge and set the **Board league ID/season**
    to whatever bucket you want the picks to land in — your real league id (to
    watch them flow into your actual board) or something like `mocktest`.
-2. In Draft IQ, point Settings at that same league id + season and turn Live on.
+2. In Draft Daddy, point Settings at that same league id + season and turn Live on.
 3. Draft. Watch the badge count climb and players vanish from the board.
 
 Caveat: with a league-id override, the `INIT` snapshot decode is keyed to the
@@ -52,7 +52,7 @@ snapshot is skipped, but live `SELECTED` frames still relay fine.
 
 ## Troubleshooting
 
-- Badge says **set up** — click it and paste the tap key from Draft IQ Settings.
+- Badge says **set up** — click it and paste the tap key from Draft Daddy Settings.
 - Badge red (**retry**) — the POST to the backend is failing; it keeps retrying
   automatically. Check the server URL in the badge config and that you're
   online. Nothing is lost: picks queue until a POST succeeds.

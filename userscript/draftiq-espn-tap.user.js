@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         Draft IQ — ESPN Draft Tap
+// @name         Draft Daddy — ESPN Draft Tap
 // @namespace    https://draftiq.databender.co
-// @version      0.1.0
-// @description  Relays live ESPN draft-room picks to your Draft IQ board (read-only; never drafts for you).
+// @version      0.2.0
+// @description  Relays live ESPN draft-room picks to your Draft Daddy board (read-only; never drafts for you).
 // @match        https://fantasy.espn.com/football/draft*
 // @match        https://lm.fantasy.espn.com/football/draft*
 // @run-at       document-start
@@ -14,10 +14,10 @@
  * protocol (SELECTED/SOLD frames, plus a base64 INIT snapshot on connect).
  * This script wraps window.WebSocket before the room connects, listens to
  * those frames on the page's own authenticated socket, and POSTs picks to
- * the Draft IQ backend (/api/draft/events). It never sends anything to ESPN.
+ * the Draft Daddy backend (/api/draft/events). It never sends anything to ESPN.
  *
  * Setup: click the "IQ" badge (bottom-right of the draft room) and paste the
- * tap key shown in Draft IQ's Settings. For mock-lobby practice, override the
+ * tap key shown in Draft Daddy's Settings. For mock-lobby practice, override the
  * league/season to your board's league so picks land in the right bucket.
  */
 
@@ -242,25 +242,25 @@
   function renderBadge() {
     if (!badge) return;
     if (!ready()) {
-      badge.textContent = 'IQ · set up';
+      badge.textContent = 'DD · set up';
       badge.style.background = '#B45309';
     } else if (lastError) {
-      badge.textContent = 'IQ · retry (' + relayedCount + ')';
+      badge.textContent = 'DD · retry (' + relayedCount + ')';
       badge.style.background = '#B91C1C';
-      badge.title = 'Draft IQ tap — last error: ' + lastError;
+      badge.title = 'Draft Daddy tap — last error: ' + lastError;
     } else {
-      badge.textContent = 'IQ · ' + relayedCount;
+      badge.textContent = 'DD · ' + relayedCount;
       badge.style.background = '#1A9988';
       badge.title =
-        'Draft IQ tap — ' + relayedCount + ' picks relayed to league ' + targetLeague();
+        'Draft Daddy tap — ' + relayedCount + ' picks relayed to league ' + targetLeague();
     }
   }
 
   function configure() {
-    var endpoint = window.prompt('Draft IQ server:', config.endpoint || DEFAULT_ENDPOINT);
+    var endpoint = window.prompt('Draft Daddy server:', config.endpoint || DEFAULT_ENDPOINT);
     if (endpoint === null) return;
     var key = window.prompt(
-      'Tap key (shown in Draft IQ → Settings → Live draft tap):',
+      'Tap key (shown in Draft Daddy → Settings → Live draft tap):',
       config.key,
     );
     if (key === null) return;
@@ -287,7 +287,7 @@
       'position:fixed;right:12px;bottom:12px;z-index:2147483647;padding:6px 10px;' +
       'border-radius:999px;font:600 12px/1 -apple-system,Segoe UI,Roboto,sans-serif;' +
       'color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35);user-select:none;';
-    badge.title = 'Draft IQ tap — click to configure';
+    badge.title = 'Draft Daddy tap — click to configure';
     badge.addEventListener('click', configure);
     document.body.appendChild(badge);
     renderBadge();

@@ -8,7 +8,7 @@ The only cost is OAuth: you must register a Yahoo app once and set two env vars.
 ## 1. Register the Yahoo app (once, ~3 minutes)
 
 1. Go to https://developer.yahoo.com/apps/create/ signed in as any Yahoo account.
-2. **Application Name**: anything (e.g. `Draft IQ`).
+2. **Application Name**: anything (e.g. `Draft Daddy`).
 3. **Application Type**: `Installed Application`.
 4. **Redirect URI**: must be HTTPS. Production: `https://draftiq.databender.co/api/yahoo/callback`.
    For local dev Yahoo will not accept `http://localhost`, so either
@@ -20,7 +20,7 @@ The only cost is OAuth: you must register a Yahoo app once and set two env vars.
 Note: Yahoo now also routes commercial/product access through an application form at
 https://sports.yahoo.com/developer/access/ (they review submissions and ask for a use-case
 and user-volume tier). Self-serve app creation still works for personal use as of Aug 2026;
-if Draft IQ ever gets real Yahoo traffic, apply through the portal and add the required
+if Draft Daddy ever gets real Yahoo traffic, apply through the portal and add the required
 "Fantasy data provided by Yahoo Fantasy" attribution.
 
 ## 2. Configure the server
