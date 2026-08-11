@@ -1,18 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import { ApiError, fetchPlayers } from './api';
-import BestAvailable from './components/BestAvailable';
-import DraftBoard from './components/DraftBoard';
-import FilterBar from './components/FilterBar';
+import DraftPage from './components/DraftPage';
 import HelpPage from './components/HelpPage';
-import RemovedPanel from './components/RemovedPanel';
 import type { RemovedEntry } from './components/RemovedPanel';
-import RosterPanel from './components/RosterPanel';
 import StrategyPage from './components/StrategyPage';
-import SuggestedPick from './components/SuggestedPick';
 import Toast from './components/Toast';
 import TooltipProvider from './components/TooltipProvider';
 import type { ToastState } from './components/Toast';
-import WatchStrip from './components/WatchStrip';
 import type { TeamMap } from './lib/context';
 import { byeCountsFor } from './lib/context';
 import { suggestPick } from './lib/suggest';
@@ -345,97 +339,63 @@ export default function App() {
       {page === 'strategy' && <StrategyPage />}
 
       {page === 'draft' && (
-        <>
-      {loadError && <div className="banner bad">{loadError}</div>}
-      {sync.error && <div className="banner bad">ESPN sync: {sync.error}</div>}
-      {unmatched.length > 0 && (
-        <div className="banner warn">
-          <strong>{unmatched.length} ESPN picks did not match the projections</strong>
-          <span className="banner-list">
-            {unmatched.map((pick) => `${pick.name} (${pick.pos}${pick.team ? ` · ${pick.team}` : ''})`).join(', ')}
-          </span>
-          <span className="banner-note">Mark these drafted by hand.</span>
-        </div>
-      )}
-
-      <FilterBar
-        search={search}
-        onSearch={setSearch}
-        onEnter={() => {
-          if (cursorIdx !== null) return;
-          if (!search.trim()) return;
-          if (view === 'removed') {
-            if (removedEntries.length > 0) undoPlayer(removedEntries[0].player);
-            return;
-          }
-          const top = visible.find((player) => !draftedIds.has(player.id));
-          if (top) draftPlayer(top, false);
-        }}
-        view={view}
-        onView={setView}
-        removedCount={manual.size}
-        posFilter={posFilter}
-        onPosFilter={setPosFilter}
-        dismissed={dismissed}
-        onDismiss={dismissPos}
-        onRestore={restorePos}
-        showDrafted={showDrafted}
-        onShowDrafted={setShowDrafted}
-        visibleCount={undrafted.length}
-        draftedCount={draftedIds.size}
-      />
-
-      <main className="layout">
-        <div className="main-col">
-          <SuggestedPick suggestion={suggestion} onDraft={draftPlayer} />
-          <WatchStrip
-            players={watching}
-            onFocus={(player) => {
-              setView('board');
-              setSearch(player.name);
-            }}
-            onUnstar={toggleStar}
-          />
-          <BestAvailable players={undrafted} positions={livePositions} onDraft={draftPlayer} />
-          {loading ? (
-            <p className="empty">Loading projections…</p>
-          ) : view === 'removed' ? (
-            <RemovedPanel
-              entries={removedEntries}
-              espnCount={espnDrafted.size}
-              onRestore={undoPlayer}
-              now={now}
-            />
-          ) : (
-            <DraftBoard
-              rows={visible}
-              draftedIds={draftedIds}
-              myIds={mine}
-              espnIds={espnDrafted}
-              sort={sort}
-              onSort={handleSort}
-              onDraft={draftPlayer}
-              onUndo={undoPlayer}
-              maxVor={maxVor}
-              loading={loading}
-              starred={starred}
-              onToggleStar={toggleStar}
-              cursorId={cursorIdx !== null ? (visible[cursorIdx]?.id ?? null) : null}
-            />
-          )}
-        </div>
-        <RosterPanel
-          players={myPlayers}
-          teamName={teamName}
+        <DraftPage
+          loadError={loadError}
+          syncError={sync.error}
+          unmatched={unmatched}
+          search={search}
+          onSearch={setSearch}
+          onEnter={() => {
+            if (cursorIdx !== null) return;
+            if (!search.trim()) return;
+            if (view === 'removed') {
+              if (removedEntries.length > 0) undoPlayer(removedEntries[0].player);
+              return;
+            }
+            const top = visible.find((player) => !draftedIds.has(player.id));
+            if (top) draftPlayer(top, false);
+          }}
+          view={view}
+          onView={setView}
+          removedCount={manual.size}
+          posFilter={posFilter}
+          onPosFilter={setPosFilter}
           dismissed={dismissed}
-          onDismiss={dismissPos}
-          config={settings.roster}
-          mineIds={mine}
+          onDismissPos={dismissPos}
+          onRestorePos={restorePos}
+          showDrafted={showDrafted}
+          onShowDrafted={setShowDrafted}
+          visibleCount={undrafted.length}
+          draftedCount={draftedIds.size}
+          suggestion={suggestion}
+          watching={watching}
+          onFocusPlayer={(player) => {
+            setView('board');
+            setSearch(player.name);
+          }}
+          onToggleStar={toggleStar}
+          undrafted={undrafted}
+          livePositions={livePositions}
+          loading={loading}
+          removedEntries={removedEntries}
+          espnCount={espnDrafted.size}
+          now={now}
+          rows={visible}
+          draftedIds={draftedIds}
+          myIds={mine}
+          espnIds={espnDrafted}
+          sort={sort}
+          onSort={handleSort}
+          onDraft={draftPlayer}
+          onUndo={undoPlayer}
+          maxVor={maxVor}
+          starred={starred}
+          cursorId={cursorIdx !== null ? (visible[cursorIdx]?.id ?? null) : null}
+          myPlayers={myPlayers}
+          teamName={teamName}
+          rosterConfig={settings.roster}
           onNotMine={notMine}
-          onRestore={undoPlayer}
         />
-      </main>
-        </>
       )}
 
       <SettingsDrawer
