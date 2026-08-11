@@ -1,0 +1,441 @@
+/* ============================================================================
+   MOBILE LAYER — docs/mobile-design.md, phone portrait 375–430px.
+
+   EVERY rule in this file lives inside `@media (max-width: 640px)`. That string
+   is the one in `hooks/useIsMobile.ts` (MOBILE_QUERY) and the two must never
+   drift — CSS and the component branching have to agree exactly (§7).
+
+   Imported LAST from main.tsx (§2 conflict J), followed only by
+   mobile-sheets.css: media queries add no specificity, so this file wins purely
+   by cascade order. Importing it from board.css would place it BEFORE
+   board.css's own rules and silently lose.
+
+   NEAR THE 500-LINE CEILING. The dock, the shared Sheet primitive and every
+   per-sheet rule live in src/mobile-sheets.css — put new sheet CSS there.
+
+   641–1100px is untouched: the existing tablet stack still serves it.
+   No raw colors — every value resolves through the tokens in styles.css.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* ---------- shell ---------- */
+
+  /* Fix 10: the fixed dock would otherwise cover the last row of the list. */
+  body {
+    padding-bottom: calc(56px + env(safe-area-inset-bottom) + 12px);
+  }
+
+  .layout {
+    gap: 8px;
+    padding: 0 0 8px;
+  }
+
+  .main-col {
+    gap: 8px;
+  }
+
+  /* ---------- ① app bar (48px, sticky) ---------- */
+
+  .mbar {
+    align-items: center;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 8px;
+    height: 48px;
+    padding: 0 8px 0 12px;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+  }
+
+  .mbar-brand,
+  .mbar-status,
+  .mbar-menu {
+    -webkit-tap-highlight-color: transparent;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .mbar-brand {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    height: 44px;
+  }
+
+  .mbar-logo {
+    display: block;
+    height: 26px;
+    width: auto;
+  }
+
+  .mbar-name {
+    color: var(--ink);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .mbar-status {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    margin-left: auto;
+    min-height: 44px;
+    justify-content: center;
+    text-align: right;
+  }
+
+  .mbar-counts {
+    color: var(--ink-3);
+    font-size: 11px;
+  }
+
+  .mbar-menu {
+    align-items: center;
+    color: var(--ink-2);
+    display: inline-flex;
+    font-size: 18px;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+  }
+
+  /* ---------- ② chip rail (44px band, 34px chips) ---------- */
+
+  .chiprail {
+    -webkit-overflow-scrolling: touch;
+    align-items: center;
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 6px;
+    height: 44px;
+    overflow-x: auto;
+    padding: 0 12px;
+    position: sticky;
+    scrollbar-width: none;
+    scroll-snap-type: x proximity;
+    top: 48px;
+    z-index: 19;
+  }
+
+  .chiprail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chiprail > * {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+  }
+
+  .chiprail .chip {
+    -webkit-tap-highlight-color: transparent;
+    font-size: 13px;
+    height: 34px;
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+
+  .chiprail .chip.filled {
+    color: var(--ink-3);
+  }
+
+  .chiprail .chip.watch {
+    color: var(--star);
+  }
+
+  .chiprail-sort,
+  .chiprail-more {
+    -webkit-tap-highlight-color: transparent;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-2);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    height: 34px;
+    padding: 0 12px;
+    white-space: nowrap;
+  }
+
+  .chiprail-more {
+    padding: 0 14px;
+  }
+
+  /* The desktop hide-position affordance is a ~14px destructive target glued to
+     a filter chip. It never renders in ChipRail; this is the resize backstop. */
+  .chip-x {
+    display: none;
+  }
+
+  /* ---------- ③ suggested strip (44px, collapsible) ---------- */
+
+  .sugstrip {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: var(--accent-soft);
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    color: var(--accent-ink);
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    height: 44px;
+    padding: 0 12px;
+    position: sticky;
+    top: 92px;
+    transition: transform 0.18s ease-out;
+    width: 100%;
+    z-index: 18;
+  }
+
+  .sugstrip.hidden {
+    transform: translateY(-100%);
+  }
+
+  .sugstrip-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .sugstrip-name {
+    color: var(--ink);
+    flex: 1;
+    font-size: 15px;
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sugstrip-vor {
+    color: var(--ink);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  /* ---------- ④ the list ---------- */
+
+  .board {
+    border-left: 0;
+    border-radius: 0;
+    border-right: 0;
+    box-shadow: none;
+  }
+
+  /* Fix 2: an app-level nested scroller is iOS-hostile; the page scrolls. */
+  .table-scroll {
+    max-height: none;
+    overflow: visible;
+  }
+
+  .mrow-wrap {
+    background: var(--accent);
+    border-bottom: 1px solid var(--line);
+    contain-intrinsic-size: 64px;
+    content-visibility: auto;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Swipe-right underlay: revealed only while the row is travelling. */
+  .mrow-under {
+    align-items: center;
+    display: flex;
+    inset: 0;
+    opacity: 0;
+    padding-left: 16px;
+    position: absolute;
+  }
+
+  .mrow-wrap.swiping .mrow-under {
+    opacity: 1;
+  }
+
+  .mrow-under-label {
+    color: var(--on-accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  .mrow {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: var(--surface);
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 28px minmax(0, 1fr) 52px 48px;
+    height: 64px;
+    padding: 0 12px;
+    position: relative;
+    /* Vertical scroll always wins arbitration (FINAL DECISION 1). */
+    touch-action: pan-y;
+    transition: transform 0.16s ease-out;
+  }
+
+  .mrow.mine {
+    box-shadow: inset 3px 0 0 var(--accent);
+  }
+
+  .mrow.drafted .mrow-name {
+    color: var(--ink-3);
+    text-decoration: line-through;
+  }
+
+  .mrow.drafted .badge,
+  .mrow.drafted .tier,
+  .mrow.drafted .vor-bar {
+    opacity: 0.45;
+  }
+
+  .mrow-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .mrow-l1,
+  .mrow-l2 {
+    align-items: center;
+    display: flex;
+    gap: 6px;
+    min-width: 0;
+  }
+
+  .mrow-name {
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mrow-star {
+    color: var(--star);
+    font-size: 12px;
+  }
+
+  .mrow-l2 {
+    color: var(--ink-3);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mrow-team,
+  .mrow-prank {
+    white-space: nowrap;
+  }
+
+  .mrow-adp {
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 1px 5px;
+  }
+
+  .mrow-adp.good {
+    background: var(--good-soft);
+    color: var(--good);
+  }
+
+  .mrow-adp.bad {
+    background: var(--bad-soft);
+    color: var(--bad);
+  }
+
+  .mrow-vor {
+    position: relative;
+    text-align: right;
+  }
+
+  .mrow-vor-num {
+    color: var(--ink);
+    font-size: 20px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+
+  .mrow-vor .vor-bar {
+    bottom: -6px;
+    right: 0;
+  }
+
+  .mrow-x {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 16px;
+    height: 48px;
+    justify-content: center;
+    padding: 0;
+    width: 48px;
+  }
+
+  /* Tier-break divider — the strongest draft heuristic as list structure. */
+  .mtier {
+    align-items: center;
+    background: var(--surface-2);
+    border-top: 1px solid var(--line-2);
+    display: flex;
+    height: 20px;
+    padding: 0 12px;
+  }
+
+  .mtier-label {
+    color: var(--ink-3);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+
+  .board-more .btn {
+    min-height: 48px;
+    width: 100%;
+  }
+
+  /* ---------- mandatory fixes ---------- */
+
+  /* Fix 1: below 16px iOS Safari zooms the viewport on focus and does NOT zoom
+     back out — mid-draft, with no obvious recovery. */
+  .search,
+  .field input,
+  .field select,
+  .field textarea {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  /* Fix 3: at bottom 22px the toast sits underneath the dock, which would make
+     undo — the safety net for a one-tap destructive action — invisible. */
+  .toast {
+    bottom: calc(56px + env(safe-area-inset-bottom) + 12px);
+    left: 8px;
+    right: 8px;
+    transform: none;
+  }
+
+  .toast .btn {
+    min-height: 44px;
+  }
+}

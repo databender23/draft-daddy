@@ -1,0 +1,167 @@
+/* ============================================================================
+   MOBILE OVERLAY LAYER — the fixed dock and the sheets it opens.
+
+   Same media query, same cascade position as mobile.css; split out only to keep
+   both files under the 500-line repo ceiling, which docs/mobile-design.md §9
+   risk 8 anticipated. It must stay at src/ top level: check-theme.mjs scans
+   `readdirSync(src)` non-recursively, so a stylesheet in a subfolder would go
+   unchecked. Imported from main.tsx immediately after mobile.css.
+
+   ADD NEW SHEET CSS HERE, not in mobile.css (which is near its ceiling).
+   Per-sheet classes are prefixed by component — .psheet-, .mypick-, .searchov-,
+   .sortsheet-, .menusheet-, .syncsheet- — while the shared .sheet* primitive
+   and the .dock* chrome live here.
+
+   No raw colors — every value resolves through the tokens in styles.css.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* ---------- ⑤ dock (56px + safe area, four slots) ---------- */
+
+  .dock {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    left: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+    position: fixed;
+    right: 0;
+    z-index: 30;
+  }
+
+  .dock-btn {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--ink-3);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    justify-content: center;
+    min-height: 56px;
+    padding: 6px 2px;
+  }
+
+  .dock-btn:active {
+    color: var(--accent);
+  }
+
+  .dock-ico {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .dock-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .dock-primary {
+    color: var(--accent);
+  }
+
+  .dock-primary .dock-ico {
+    font-size: 12px;
+  }
+
+  /* ---------- sheets ---------- */
+
+  .sheet-root {
+    inset: 0;
+    position: fixed;
+    z-index: 60;
+  }
+
+  .sheet-scrim {
+    background: var(--scrim);
+    inset: 0;
+    position: absolute;
+  }
+
+  .sheet {
+    background: var(--surface);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    bottom: 0;
+    box-shadow: var(--shadow-2);
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    max-height: 85dvh;
+    padding-bottom: env(safe-area-inset-bottom);
+    position: absolute;
+    right: 0;
+    transition: transform 0.18s ease-out;
+  }
+
+  .sheet-grip {
+    flex: 0 0 auto;
+    touch-action: none;
+  }
+
+  .sheet-handle {
+    background: var(--line-2);
+    border-radius: 999px;
+    height: 4px;
+    margin: 8px auto 4px;
+    width: 36px;
+  }
+
+  .sheet-head {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    padding: 4px 8px 8px 16px;
+  }
+
+  .sheet-title {
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .sheet-close {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 16px;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+  }
+
+  .sheet-body {
+    -webkit-overflow-scrolling: touch;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 12px 16px 16px;
+  }
+
+  .sheet-foot {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    bottom: 0;
+    display: flex;
+    gap: 8px;
+    padding: 10px 16px;
+    position: sticky;
+  }
+
+  /* Fix 4: RosterPanel is sticky to the desktop topbar; inside a sheet that
+     pins it to the wrong thing. */
+  .roster {
+    position: static;
+    top: auto;
+  }
+}

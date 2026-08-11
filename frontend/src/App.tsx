@@ -13,6 +13,7 @@ import { suggestPick } from './lib/suggest';
 import SettingsDrawer from './components/SettingsDrawer';
 import TopBar from './components/TopBar';
 import { useBoardKeys } from './hooks/useBoardKeys';
+import { useIsMobile } from './hooks/useIsMobile';
 import { useDraftSync, hasCreds } from './hooks/useDraftSync';
 import type { SortKey } from './lib/board';
 import { DEFAULT_SORT, defaultDirFor, matchesSearch, sortPlayers } from './lib/board';
@@ -31,6 +32,7 @@ import { POSITIONS } from './types';
 
 export default function App() {
   const [initial] = useState(loadInitial);
+  const isMobile = useIsMobile();
 
   const [scoring, setScoring] = useState<Scoring>('PPR');
   const [avg, setAvg] = useState<AvgMethod>('average');
@@ -367,7 +369,10 @@ export default function App() {
           onUndo={undoPlayer}
           maxVor={maxVor}
           starred={starred}
-          cursorId={cursorIdx !== null ? (visible[cursorIdx]?.id ?? null) : null}
+          /* Fix 7: no keyboard means no cursor concept. Forced null rather than
+             merely ignored — a live cursorId would make DraftBoard's
+             scrollIntoView effect yank the list under the user's thumb. */
+          cursorId={isMobile || cursorIdx === null ? null : (visible[cursorIdx]?.id ?? null)}
           myPlayers={myPlayers}
           teamName={teamName}
           rosterConfig={settings.roster}

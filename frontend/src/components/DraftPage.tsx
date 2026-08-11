@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import BestAvailable from './BestAvailable';
 import DraftBoard from './DraftBoard';
 import FilterBar from './FilterBar';
@@ -6,7 +7,10 @@ import type { RemovedEntry } from './RemovedPanel';
 import RosterPanel from './RosterPanel';
 import SuggestedPick from './SuggestedPick';
 import WatchStrip from './WatchStrip';
+import type { PosFill } from './mobile/ChipRail';
 import type { SortKey, SortState } from '../lib/board';
+import { COLUMNS } from '../lib/board';
+import { buildRoster } from '../lib/roster';
 import type { Suggestion } from '../lib/suggest';
 import type {
   BoardView,
@@ -71,6 +75,25 @@ interface Props {
 }
 
 /**
+ * Per-position starter fill for the mobile chip rail, from the same
+ * `buildRoster()` the roster panel uses. Only dedicated slots count: a FLEX
+ * belongs to no single position, so folding it into RB/WR/TE would print a
+ * fill state that is not true of either.
+ */
+function posFill(players: Player[], config: RosterConfig): Partial<Record<Pos, PosFill>> {
+  const fill: Partial<Record<Pos, PosFill>> = {};
+  for (const slot of buildRoster(players, config).starters) {
+    if (slot.accepts.length !== 1) continue;
+    const pos = slot.accepts[0];
+    const entry = fill[pos] ?? { filled: 0, total: 0 };
+    entry.total += 1;
+    if (slot.player !== null) entry.filled += 1;
+    fill[pos] = entry;
+  }
+  return fill;
+}
+
+/**
  * The draft page itself: sync/load banners, the filter bar and the two-column
  * board + roster layout. Pure composition — every value and callback is a prop,
  * so all draft state stays in App.
@@ -120,6 +143,9 @@ export default function DraftPage({
   rosterConfig,
   onNotMine,
 }: Props) {
+  const sortLabel = COLUMNS.find((column) => column.key === sort.key)?.label ?? sort.key;
+  const fill = useMemo(() => posFill(myPlayers, rosterConfig), [myPlayers, rosterConfig]);
+
   return (
     <>
       {loadError && <div className="banner bad">{loadError}</div>}
@@ -150,6 +176,15 @@ export default function DraftPage({
         onShowDrafted={onShowDrafted}
         visibleCount={visibleCount}
         draftedCount={draftedCount}
+        sortLabel={sortLabel}
+        fill={fill}
+        watchCount={watching.length}
+        /* TODO(integration): the Board options sheet and the ★ watch-only
+           filter do not exist yet — these are inert until App owns the sheet
+           state machine and a `watchOnly` flag. */
+        onOpenOptions={() => {}}
+        watchOnly={false}
+        onWatchToggle={() => {}}
       />
 
       <main className="layout">
@@ -181,6 +216,9 @@ export default function DraftPage({
               starred={starred}
               onToggleStar={onToggleStar}
               cursorId={cursorId}
+              showDrafted={showDrafted}
+              /* TODO(integration): pass App's `openPlayer` once useSheets is
+                 mounted; until then a mobile row tap is inert. */
             />
           )}
         </div>

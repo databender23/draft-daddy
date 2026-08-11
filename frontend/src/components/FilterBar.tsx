@@ -1,4 +1,7 @@
 import type { KeyboardEvent } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
+import ChipRail from './mobile/ChipRail';
+import type { PosFill } from './mobile/ChipRail';
 import type { BoardView, Pos, PosFilter } from '../types';
 import { POSITIONS } from '../types';
 
@@ -18,6 +21,21 @@ interface Props {
   onShowDrafted: (value: boolean) => void;
   visibleCount: number;
   draftedCount: number;
+  /**
+   * Fix 5: unconditional autoFocus pops the iOS keyboard on page load and eats
+   * ~45% of the viewport before the user has seen anything. It stays on for the
+   * desktop inline bar (unchanged default) and moves to the Search overlay,
+   * which is the only place it is correct.
+   */
+  autoFocus?: boolean;
+
+  /* mobile chip rail (below 640px this component renders ChipRail instead) */
+  sortLabel: string;
+  onOpenOptions: () => void;
+  fill: Partial<Record<Pos, PosFill>>;
+  watchCount: number;
+  watchOnly: boolean;
+  onWatchToggle: () => void;
 }
 
 export default function FilterBar({
@@ -36,7 +54,15 @@ export default function FilterBar({
   onShowDrafted,
   visibleCount,
   draftedCount,
+  autoFocus = true,
+  sortLabel,
+  onOpenOptions,
+  fill,
+  watchCount,
+  watchOnly,
+  onWatchToggle,
 }: Props) {
+  const isMobile = useIsMobile();
   const active = POSITIONS.filter((pos) => !dismissed.includes(pos));
 
   function handleKey(event: KeyboardEvent<HTMLInputElement>) {
@@ -44,6 +70,27 @@ export default function FilterBar({
     event.preventDefault();
     if (!search.trim()) return;
     onEnter();
+  }
+
+  // Below 640px the whole desktop bar — view tabs, inline search, chip grid,
+  // Show drafted, counts — is replaced by one 44px scrolling rail. Its pieces
+  // are re-homed to the app bar, the dock and the Board options sheet (§6).
+  if (isMobile) {
+    return (
+      <ChipRail
+        sortLabel={sortLabel}
+        onOpenOptions={onOpenOptions}
+        posFilter={posFilter}
+        onPosFilter={onPosFilter}
+        fill={fill}
+        dismissed={dismissed}
+        onRestorePos={onRestore}
+        watchCount={watchCount}
+        watchOnly={watchOnly}
+        onWatchToggle={onWatchToggle}
+        availableCount={visibleCount}
+      />
+    );
   }
 
   return (
@@ -79,7 +126,7 @@ export default function FilterBar({
             : 'Search player, team… (Enter drafts the top result)'
         }
         aria-label="Search players"
-        autoFocus
+        autoFocus={autoFocus}
         onChange={(e) => onSearch(e.target.value)}
         onKeyDown={handleKey}
       />

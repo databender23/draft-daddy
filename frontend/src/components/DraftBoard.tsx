@@ -1,13 +1,19 @@
 import type { MouseEvent } from 'react';
-import { useEffect, useRef, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
 import type { Column, SortKey, SortState } from '../lib/board';
 import { COLUMNS } from '../lib/board';
 import { EM_DASH, fmtNum, fmtSigned, tierClass } from '../lib/format';
+import { useIsMobile } from '../hooks/useIsMobile';
 import type { Player } from '../types';
+import BoardRow, { TierDivider } from './mobile/BoardRow';
 import PlayerName, { PlayerBadges } from './PlayerName';
 import { useTooltip } from './TooltipProvider';
 
 const PAGE = 250;
+/** Phones render ~8 rows at a time; a 250-row first paint is wasted work. */
+const PAGE_MOBILE = 100;
+
+const noop = () => {};
 
 interface Props {
   rows: Player[];
@@ -23,6 +29,9 @@ interface Props {
   starred: Set<string>;
   onToggleStar: (player: Player) => void;
   cursorId: string | null;
+  showDrafted: boolean;
+  /** Mobile only: open the Player sheet. TODO(integration): wire from App. */
+  onOpenPlayer?: (player: Player) => void;
 }
 
 function cellValue(player: Player, column: Column): string {
@@ -54,14 +63,18 @@ export default function DraftBoard({
   starred,
   onToggleStar,
   cursorId,
+  showDrafted,
+  onOpenPlayer,
 }: Props) {
-  const [limit, setLimit] = useState(PAGE);
+  const isMobile = useIsMobile();
+  const pageSize = isMobile ? PAGE_MOBILE : PAGE;
+  const [limit, setLimit] = useState(pageSize);
   const cursorRef = useRef<HTMLTableRowElement | null>(null);
   const tip = useTooltip();
 
   useEffect(() => {
-    setLimit(PAGE);
-  }, [rows.length, sort.key, sort.dir]);
+    setLimit(pageSize);
+  }, [rows.length, sort.key, sort.dir, pageSize]);
 
   useEffect(() => {
     cursorRef.current?.scrollIntoView({ block: 'nearest' });
@@ -71,6 +84,54 @@ export default function DraftBoard({
 
   function handleDraft(event: MouseEvent<HTMLButtonElement>, player: Player) {
     onDraft(player, event.altKey || event.metaKey || event.shiftKey);
+  }
+
+  const more = rows.length > shown.length && (
+    <div className="board-more">
+      <button type="button" className="btn" onClick={() => setLimit(limit + pageSize)}>
+        Show more ({shown.length} of {rows.length})
+      </button>
+    </div>
+  );
+
+  const emptyState = !loading && rows.length === 0 && (
+    <p className="empty">No players match these filters.</p>
+  );
+
+  if (isMobile) {
+    // Tier dividers only make sense under the default VOR sort; under any other
+    // ordering the tier sequence is arbitrary noise (§3④).
+    const tierBreaks = sort.key === 'vor';
+    return (
+      <section className="board">
+        <div className="mlist">
+          {shown.map((player, index) => {
+            const previous = index > 0 ? shown[index - 1] : null;
+            const newTier = tierBreaks && previous !== null && previous.tier !== player.tier;
+            return (
+              <Fragment key={player.id}>
+                {newTier && <TierDivider tier={player.tier} />}
+                <BoardRow
+                  player={player}
+                  drafted={draftedIds.has(player.id)}
+                  mine={myIds.has(player.id)}
+                  espn={espnIds.has(player.id)}
+                  starred={starred.has(player.id)}
+                  maxVor={maxVor}
+                  showDrafted={showDrafted}
+                  onRemove={(p) => onDraft(p, false)}
+                  onMine={(p) => onDraft(p, true)}
+                  onUndo={onUndo}
+                  onOpen={onOpenPlayer ?? noop}
+                />
+              </Fragment>
+            );
+          })}
+        </div>
+        {emptyState}
+        {more}
+      </section>
+    );
   }
 
   return (
@@ -210,14 +271,8 @@ export default function DraftBoard({
         </table>
       </div>
 
-      {!loading && rows.length === 0 && <p className="empty">No players match these filters.</p>}
-      {rows.length > shown.length && (
-        <div className="board-more">
-          <button type="button" className="btn" onClick={() => setLimit(limit + PAGE)}>
-            Show more ({shown.length} of {rows.length})
-          </button>
-        </div>
-      )}
+      {emptyState}
+      {more}
     </section>
   );
 }
