@@ -1,0 +1,31 @@
+# Dependencies / environments
+node_modules/
+.venv/
+venv/
+
+# Build artifacts
+frontend/dist/
+.vite/
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Scrape outputs (installed copy lives in backend/data/)
+data-pipeline/output/
+
+# Local review holding pen
+to_delete/
+
+# Secrets / local config
+.env
+.env.*
+docs/deploy.local.md
+*.local.md
+
+# OS / editor noise
+.DS_Store
+*.log
+.idea/
+.vscode/

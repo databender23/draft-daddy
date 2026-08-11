@@ -1,0 +1,24 @@
+{
+  "season": 2026,
+  "generated": "2026-08-06",
+  "teams": {
+    "ATL": {
+      "bye": 5,
+      "pass_rate": 0.58,
+      "pass_rank": 4,
+      "sos": {"QB": 12, "RB": 27, "WR": 8, "TE": 19, "K": 30, "DST": 3}
+    },
+    "PHI": {
+      "bye": 9,
+      "pass_rate": 0.49,
+      "pass_rank": 28,
+      "sos": {"QB": 21, "RB": 6, "WR": 14, "TE": 2, "K": 11, "DST": 25}
+    },
+    "KCC": {
+      "bye": 10,
+      "pass_rate": 0.63,
+      "pass_rank": 1,
+      "sos": {"QB": 1, "RB": 32, "WR": 5, "TE": 9, "K": 17, "DST": 22}
+    }
+  }
+}

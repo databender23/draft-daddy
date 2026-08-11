@@ -1,0 +1,5 @@
+# Disposable download cache for build_team_context.py — never commit these
+# (stats_player_week_*.csv alone is ~8 MB). Delete any file here to force a
+# fresh download on the next run.
+*
+!.gitignore

@@ -1,0 +1,422 @@
+{
+ "season": 2026,
+ "generated": "2026-08-06",
+ "teams": {
+  "ARI": {
+   "bye": 14,
+   "pass_rate": 0.6394,
+   "pass_rank": 1,
+   "sos": {
+    "QB": 14,
+    "RB": 24,
+    "WR": 14,
+    "TE": 24,
+    "K": 17,
+    "DST": 24
+   }
+  },
+  "ATL": {
+   "bye": 11,
+   "pass_rate": 0.5333,
+   "pass_rank": 20,
+   "sos": {
+    "QB": 17,
+    "RB": 13,
+    "WR": 20,
+    "TE": 4,
+    "K": 10,
+    "DST": 12
+   }
+  },
+  "BAL": {
+   "bye": 13,
+   "pass_rate": 0.4543,
+   "pass_rank": 32,
+   "sos": {
+    "QB": 15,
+    "RB": 14,
+    "WR": 17,
+    "TE": 3,
+    "K": 19,
+    "DST": 5
+   }
+  },
+  "BUF": {
+   "bye": 7,
+   "pass_rate": 0.475,
+   "pass_rank": 31,
+   "sos": {
+    "QB": 21,
+    "RB": 28,
+    "WR": 22,
+    "TE": 19,
+    "K": 26,
+    "DST": 14
+   }
+  },
+  "CAR": {
+   "bye": 5,
+   "pass_rate": 0.5277,
+   "pass_rank": 22,
+   "sos": {
+    "QB": 19,
+    "RB": 31,
+    "WR": 21,
+    "TE": 16,
+    "K": 7,
+    "DST": 20
+   }
+  },
+  "CHI": {
+   "bye": 10,
+   "pass_rate": 0.532,
+   "pass_rank": 21,
+   "sos": {
+    "QB": 30,
+    "RB": 30,
+    "WR": 31,
+    "TE": 31,
+    "K": 28,
+    "DST": 19
+   }
+  },
+  "CIN": {
+   "bye": 6,
+   "pass_rate": 0.6268,
+   "pass_rank": 2,
+   "sos": {
+    "QB": 12,
+    "RB": 27,
+    "WR": 9,
+    "TE": 8,
+    "K": 9,
+    "DST": 6
+   }
+  },
+  "CLE": {
+   "bye": 11,
+   "pass_rate": 0.57,
+   "pass_rank": 10,
+   "sos": {
+    "QB": 2,
+    "RB": 2,
+    "WR": 7,
+    "TE": 1,
+    "K": 2,
+    "DST": 2
+   }
+  },
+  "DAL": {
+   "bye": 14,
+   "pass_rate": 0.573,
+   "pass_rank": 9,
+   "sos": {
+    "QB": 9,
+    "RB": 5,
+    "WR": 8,
+    "TE": 15,
+    "K": 24,
+    "DST": 30
+   }
+  },
+  "DEN": {
+   "bye": 10,
+   "pass_rate": 0.5734,
+   "pass_rank": 8,
+   "sos": {
+    "QB": 29,
+    "RB": 26,
+    "WR": 28,
+    "TE": 23,
+    "K": 31,
+    "DST": 1
+   }
+  },
+  "DET": {
+   "bye": 6,
+   "pass_rate": 0.5684,
+   "pass_rank": 11,
+   "sos": {
+    "QB": 20,
+    "RB": 6,
+    "WR": 19,
+    "TE": 26,
+    "K": 6,
+    "DST": 10
+   }
+  },
+  "GBP": {
+   "bye": 11,
+   "pass_rate": 0.4985,
+   "pass_rank": 28,
+   "sos": {
+    "QB": 18,
+    "RB": 23,
+    "WR": 16,
+    "TE": 30,
+    "K": 27,
+    "DST": 23
+   }
+  },
+  "HOU": {
+   "bye": 8,
+   "pass_rate": 0.5506,
+   "pass_rank": 14,
+   "sos": {
+    "QB": 5,
+    "RB": 12,
+    "WR": 2,
+    "TE": 14,
+    "K": 5,
+    "DST": 21
+   }
+  },
+  "IND": {
+   "bye": 13,
+   "pass_rate": 0.5531,
+   "pass_rank": 13,
+   "sos": {
+    "QB": 10,
+    "RB": 15,
+    "WR": 13,
+    "TE": 9,
+    "K": 32,
+    "DST": 13
+   }
+  },
+  "JAC": {
+   "bye": 7,
+   "pass_rate": 0.5352,
+   "pass_rank": 19,
+   "sos": {
+    "QB": 4,
+    "RB": 19,
+    "WR": 3,
+    "TE": 5,
+    "K": 12,
+    "DST": 28
+   }
+  },
+  "KCC": {
+   "bye": 5,
+   "pass_rate": 0.5759,
+   "pass_rank": 6,
+   "sos": {
+    "QB": 28,
+    "RB": 20,
+    "WR": 25,
+    "TE": 13,
+    "K": 8,
+    "DST": 4
+   }
+  },
+  "LAC": {
+   "bye": 7,
+   "pass_rate": 0.5498,
+   "pass_rank": 15,
+   "sos": {
+    "QB": 26,
+    "RB": 25,
+    "WR": 30,
+    "TE": 22,
+    "K": 29,
+    "DST": 17
+   }
+  },
+  "LAR": {
+   "bye": 11,
+   "pass_rate": 0.5626,
+   "pass_rank": 12,
+   "sos": {
+    "QB": 16,
+    "RB": 7,
+    "WR": 18,
+    "TE": 20,
+    "K": 20,
+    "DST": 25
+   }
+  },
+  "LVR": {
+   "bye": 13,
+   "pass_rate": 0.5826,
+   "pass_rank": 4,
+   "sos": {
+    "QB": 32,
+    "RB": 32,
+    "WR": 32,
+    "TE": 21,
+    "K": 16,
+    "DST": 7
+   }
+  },
+  "MIA": {
+   "bye": 6,
+   "pass_rate": 0.5258,
+   "pass_rank": 23,
+   "sos": {
+    "QB": 27,
+    "RB": 18,
+    "WR": 26,
+    "TE": 27,
+    "K": 23,
+    "DST": 18
+   }
+  },
+  "MIN": {
+   "bye": 6,
+   "pass_rate": 0.5414,
+   "pass_rank": 18,
+   "sos": {
+    "QB": 8,
+    "RB": 11,
+    "WR": 5,
+    "TE": 10,
+    "K": 22,
+    "DST": 32
+   }
+  },
+  "NEP": {
+   "bye": 11,
+   "pass_rate": 0.504,
+   "pass_rank": 27,
+   "sos": {
+    "QB": 22,
+    "RB": 22,
+    "WR": 24,
+    "TE": 28,
+    "K": 25,
+    "DST": 16
+   }
+  },
+  "NOS": {
+   "bye": 8,
+   "pass_rate": 0.576,
+   "pass_rank": 5,
+   "sos": {
+    "QB": 11,
+    "RB": 3,
+    "WR": 11,
+    "TE": 11,
+    "K": 4,
+    "DST": 3
+   }
+  },
+  "NYG": {
+   "bye": 8,
+   "pass_rate": 0.5072,
+   "pass_rank": 26,
+   "sos": {
+    "QB": 6,
+    "RB": 10,
+    "WR": 6,
+    "TE": 12,
+    "K": 11,
+    "DST": 29
+   }
+  },
+  "NYJ": {
+   "bye": 13,
+   "pass_rate": 0.52,
+   "pass_rank": 24,
+   "sos": {
+    "QB": 31,
+    "RB": 29,
+    "WR": 29,
+    "TE": 32,
+    "K": 30,
+    "DST": 9
+   }
+  },
+  "PHI": {
+   "bye": 10,
+   "pass_rate": 0.5097,
+   "pass_rank": 25,
+   "sos": {
+    "QB": 1,
+    "RB": 1,
+    "WR": 1,
+    "TE": 2,
+    "K": 15,
+    "DST": 31
+   }
+  },
+  "PIT": {
+   "bye": 9,
+   "pass_rate": 0.5747,
+   "pass_rank": 7,
+   "sos": {
+    "QB": 24,
+    "RB": 17,
+    "WR": 27,
+    "TE": 6,
+    "K": 21,
+    "DST": 8
+   }
+  },
+  "SEA": {
+   "bye": 11,
+   "pass_rate": 0.4868,
+   "pass_rank": 30,
+   "sos": {
+    "QB": 13,
+    "RB": 8,
+    "WR": 12,
+    "TE": 17,
+    "K": 14,
+    "DST": 26
+   }
+  },
+  "SFO": {
+   "bye": 8,
+   "pass_rate": 0.5441,
+   "pass_rank": 16,
+   "sos": {
+    "QB": 23,
+    "RB": 16,
+    "WR": 23,
+    "TE": 25,
+    "K": 3,
+    "DST": 15
+   }
+  },
+  "TBB": {
+   "bye": 10,
+   "pass_rate": 0.5417,
+   "pass_rank": 17,
+   "sos": {
+    "QB": 25,
+    "RB": 21,
+    "WR": 15,
+    "TE": 29,
+    "K": 1,
+    "DST": 11
+   }
+  },
+  "TEN": {
+   "bye": 9,
+   "pass_rate": 0.6013,
+   "pass_rank": 3,
+   "sos": {
+    "QB": 3,
+    "RB": 9,
+    "WR": 4,
+    "TE": 7,
+    "K": 18,
+    "DST": 22
+   }
+  },
+  "WAS": {
+   "bye": 7,
+   "pass_rate": 0.4921,
+   "pass_rank": 29,
+   "sos": {
+    "QB": 7,
+    "RB": 4,
+    "WR": 10,
+    "TE": 18,
+    "K": 13,
+    "DST": 27
+   }
+  }
+ }
+}

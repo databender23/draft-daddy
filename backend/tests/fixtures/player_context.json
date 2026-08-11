@@ -1,0 +1,41 @@
+{
+  "season_prior": 2025,
+  "players": {
+    "16161": {
+      "games": 17,
+      "ppg": 18.4,
+      "opportunities_pg": 21.3,
+      "opp_label": "touches/g",
+      "target_share": 0.14,
+      "tds": 14,
+      "expected_tds": 8.2,
+      "td_regression": true,
+      "konami": false,
+      "rush_share": null
+    },
+    "15281": {
+      "games": 17,
+      "ppg": 21.7,
+      "opportunities_pg": 10.4,
+      "opp_label": "targets/g",
+      "target_share": 0.27,
+      "tds": 9,
+      "expected_tds": 8.1,
+      "td_regression": false,
+      "konami": false,
+      "rush_share": null
+    },
+    "13589": {
+      "games": 16,
+      "ppg": 22.79,
+      "opportunities_pg": 35.75,
+      "opp_label": "plays/g",
+      "target_share": null,
+      "tds": 39,
+      "expected_tds": 26.68,
+      "td_regression": true,
+      "konami": true,
+      "rush_share": 0.3891
+    }
+  }
+}

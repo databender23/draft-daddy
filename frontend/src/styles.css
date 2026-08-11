@@ -1,0 +1,302 @@
+/* ============================================================================
+   THEME TOKENS — the only place in this codebase where a raw color may appear.
+   Every other rule (here, chrome.css, board.css, panels.css, player-context.css)
+   must reference colors through var(). `node scripts/check-theme.mjs` enforces
+   both halves of that rule: no raw color outside these two blocks, and every
+   var() used anywhere is defined in BOTH blocks.
+
+   LIGHT = the Databender site palette (teal #1A9988, white/ #F8F9FA surfaces,
+   Inter, 8/12px radii, site card shadow). DARK = the dark twin: the draft app's
+   original dark surfaces with a dark-surface-legible teal and re-stepped status,
+   position and tier ramps. Resolution to light|dark happens pre-paint in
+   index.html; localStorage key "ffdraft:v1:theme" holds an explicit choice.
+   ========================================================================== */
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  /* surfaces + ink */
+  --page: #ffffff;
+  --surface: #ffffff;
+  --surface-2: #f8f9fa;
+  --line: rgba(26, 26, 26, 0.1);
+  --line-2: rgba(26, 26, 26, 0.22);
+  --ink: #1a1a1a;
+  --ink-2: #4a4a4a;
+  --ink-3: #6b7280;
+
+  /* brand */
+  --accent: #1a9988;
+  --accent-hover: #158577;
+  --accent-soft: rgba(26, 153, 136, 0.1);
+  --accent-ink: #12796c; /* accent as text on --surface (5.3:1) */
+  --on-accent: #ffffff;
+
+  /* status — re-stepped from the site semantics so text tones clear 3:1 */
+  --good: #15803d;
+  --good-soft: rgba(34, 197, 94, 0.14);
+  --bad: #b91c1c;
+  --bad-soft: rgba(239, 68, 68, 0.1);
+  --warn: #b45309;
+  --warn-soft: rgba(245, 158, 11, 0.16);
+
+  /* position badges (light-stepped) + their badge text */
+  --pos-qb: #2a78d6;
+  --pos-qb-ink: #ffffff;
+  --pos-rb: #eb6834;
+  --pos-rb-ink: #1a1a1a;
+  --pos-wr: #1baf7a;
+  --pos-wr-ink: #1a1a1a;
+  --pos-te: #eda100;
+  --pos-te-ink: #1a1a1a;
+  --pos-k: #e87ba4;
+  --pos-k-ink: #1a1a1a;
+  --pos-dst: #008300;
+  --pos-dst-ink: #ffffff;
+
+  /* sequential teal ramp — tier 1 most prominent, every step >= 4.5:1 */
+  --tier-1: #0b4a42;
+  --tier-1-ink: #ffffff;
+  --tier-2: #0f5f55;
+  --tier-2-ink: #ffffff;
+  --tier-3: #12796c;
+  --tier-3-ink: #ffffff;
+  --tier-4: #1a9988;
+  --tier-4-ink: #1a1a1a;
+  --tier-5: #35b3a1;
+  --tier-5-ink: #1a1a1a;
+  --tier-6: #6ecabd;
+  --tier-6-ink: #1a1a1a;
+  --tier-7: #a9ddd5;
+  --tier-7-ink: #1a1a1a;
+  --tier-8: #d7efeb;
+  --tier-8-ink: #1a1a1a;
+  --tier-x: rgba(26, 26, 26, 0.08);
+  --tier-x-ink: #4a4a4a;
+
+  /* incidental chrome */
+  --vor-bar: #0f7264;
+  --hover-wash: rgba(26, 26, 26, 0.04);
+  --shadow-1: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-2: 0 10px 25px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --focus-ring: #1a9988;
+  --scrim: rgba(26, 26, 26, 0.35);
+  --star: #d97706;
+  --selection: rgba(26, 153, 136, 0.22);
+
+  /* shape + type (duplicated per block so var-coverage stays symmetrical) */
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* surfaces + ink */
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-2: #232321;
+  --line: #2c2c2a;
+  --line-2: #3d3d3a;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --ink-3: #898781;
+
+  /* brand */
+  --accent: #22b8a5;
+  --accent-hover: #4dc4b6;
+  --accent-soft: rgba(34, 184, 165, 0.14);
+  --accent-ink: #4dc4b6;
+  --on-accent: #0d0d0d;
+
+  /* status */
+  --good: #4ade80;
+  --good-soft: rgba(74, 222, 128, 0.14);
+  --bad: #f87171;
+  --bad-soft: rgba(248, 113, 113, 0.14);
+  --warn: #fbbf24;
+  --warn-soft: rgba(251, 191, 36, 0.14);
+
+  /* position badges (dark-stepped — the app's original hues) */
+  --pos-qb: #3987e5;
+  --pos-qb-ink: #0d0d0d;
+  --pos-rb: #d95926;
+  --pos-rb-ink: #0d0d0d;
+  --pos-wr: #199e70;
+  --pos-wr-ink: #0d0d0d;
+  --pos-te: #c98500;
+  --pos-te-ink: #0d0d0d;
+  --pos-k: #d55181;
+  --pos-k-ink: #0d0d0d;
+  --pos-dst: #008300;
+  --pos-dst-ink: #ffffff;
+
+  /* sequential teal ramp — tier 1 brightest on a dark page */
+  --tier-1: #7fe8d9;
+  --tier-1-ink: #0d0d0d;
+  --tier-2: #5fdccb;
+  --tier-2-ink: #0d0d0d;
+  --tier-3: #3fcdb9;
+  --tier-3-ink: #0d0d0d;
+  --tier-4: #22b8a5;
+  --tier-4-ink: #0d0d0d;
+  --tier-5: #1a9988;
+  --tier-5-ink: #0d0d0d;
+  --tier-6: #157e70;
+  --tier-6-ink: #ffffff;
+  --tier-7: #10635a;
+  --tier-7-ink: #ffffff;
+  --tier-8: #0c4740;
+  --tier-8-ink: #ffffff;
+  --tier-x: #2c2c2a;
+  --tier-x-ink: #c3c2b7;
+
+  /* incidental chrome */
+  --vor-bar: #22b8a5;
+  --hover-wash: rgba(255, 255, 255, 0.04);
+  --shadow-1: 0 10px 28px rgba(0, 0, 0, 0.55);
+  --shadow-2: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --focus-ring: #4dc4b6;
+  --scrim: rgba(0, 0, 0, 0.55);
+  --star: #c98500;
+  --selection: rgba(34, 184, 165, 0.3);
+
+  /* shape + type */
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------- base ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--selection);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  color: var(--ink-2);
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- buttons & controls ---------- */
+
+.btn {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink-2);
+  cursor: pointer;
+  padding: 6px 10px;
+}
+
+.btn:hover:not(:disabled) {
+  border-color: var(--line-2);
+  color: var(--ink);
+}
+
+.btn:disabled {
+  cursor: default;
+  opacity: 0.45;
+}
+
+.btn.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--on-accent);
+}
+
+.btn.tiny {
+  border-radius: 6px;
+  font-size: 12px;
+  padding: 3px 8px;
+}
+
+.segmented {
+  display: inline-flex;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+
+.seg {
+  background: transparent;
+  border: 0;
+  color: var(--ink-3);
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.seg + .seg {
+  border-left: 1px solid var(--line);
+}
+
+.seg.on {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.toggle {
+  align-items: center;
+  color: var(--ink-2);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.toggle input {
+  accent-color: var(--accent);
+}

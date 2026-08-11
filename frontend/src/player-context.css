@@ -1,0 +1,172 @@
+/* Player context card (bye / schedule / offense / last season) and name badges.
+   Split out of board.css to keep each stylesheet under the repo line limit. */
+
+/* Name anchors are focusable so the card is reachable without a mouse. */
+.player-name,
+.tile-name .player-name,
+.suggested-name {
+  border-radius: 4px;
+  cursor: default;
+  outline-offset: 2px;
+}
+
+.player-name:focus-visible,
+.suggested-name:focus-visible {
+  outline: 2px solid var(--focus-ring);
+}
+
+.ptip {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  color: var(--ink-2);
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 12px 14px;
+  pointer-events: none;
+  position: fixed;
+  width: min(620px, calc(100vw - 16px));
+  z-index: 60;
+}
+
+.ptip-body {
+  align-items: start;
+  display: grid;
+  gap: 4px 14px;
+  grid-template-columns: 1fr 1fr;
+}
+
+.ptip-head {
+  align-items: center;
+  display: flex;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+
+.ptip-name {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.ptip-team {
+  color: var(--ink-3);
+  font-size: 11px;
+}
+
+.ptip-kpis {
+  display: grid;
+  gap: 6px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ptip-kpis.season {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.ptip-kpis.market {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.ptip-sec.market-sec {
+  margin-top: 0;
+}
+
+.ptip-callout:first-child {
+  border-top: none;
+  margin-top: 0;
+  padding-top: 0;
+}
+
+.kpi {
+  background: var(--page);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 9px;
+}
+
+.kpi-label {
+  color: var(--ink-3);
+  font-size: 10px;
+  letter-spacing: 0.05em;
+  min-height: 13px;
+  overflow-wrap: break-word;
+  text-transform: uppercase;
+}
+
+.kpi-value {
+  color: var(--ink);
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.kpi-value.tone-good {
+  color: var(--good);
+}
+
+.kpi-value.tone-bad {
+  color: var(--bad);
+}
+
+.kpi-value.tone-warn {
+  color: var(--warn);
+}
+
+.kpi-sub {
+  color: var(--ink-3);
+  font-size: 11px;
+}
+
+.ptip-sec {
+  color: var(--ink-3);
+  font-size: 10px;
+  letter-spacing: 0.06em;
+  margin: 9px 0 5px;
+  text-transform: uppercase;
+}
+
+.ptip-none {
+  border-top: 1px solid var(--line);
+  color: var(--ink-3);
+  margin-top: 8px;
+  padding-top: 7px;
+}
+
+.ptip-callout {
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 7px;
+  margin-top: 8px;
+  padding-top: 7px;
+}
+
+.ptip-callout-icon {
+  flex: none;
+}
+
+.ptip-callout.tone-warn .ptip-callout-icon {
+  color: var(--warn);
+}
+
+.ptip-callout.tone-good .ptip-callout-icon {
+  color: var(--good);
+}
+
+.pbadge {
+  cursor: help;
+  font-size: 11px;
+  margin-left: 5px;
+}
+
+.pbadge.warn {
+  color: var(--warn);
+}
+
+.pbadge.konami {
+  color: var(--pos-qb);
+}

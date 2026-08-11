@@ -1,0 +1,492 @@
+/* Secondary surfaces: settings drawer, suggested-pick strip, watchlist strip,
+   toast, top nav, help/strategy pages, removed panel, roster config.
+   Split out of board.css to keep each stylesheet under the repo line limit.
+   No raw colors — everything resolves through the tokens in styles.css. */
+
+/* ---------- settings drawer ---------- */
+
+.drawer-backdrop {
+  background: var(--scrim);
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  left: 0;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 50;
+}
+
+.drawer {
+  background: var(--surface);
+  border-left: 1px solid var(--line);
+  box-shadow: var(--shadow-2);
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 420px;
+}
+
+.drawer-head,
+.drawer-foot {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+}
+
+.drawer-foot {
+  border-bottom: 0;
+  border-top: 1px solid var(--line);
+}
+
+.drawer-head {
+  justify-content: space-between;
+}
+
+.drawer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field > span {
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.field input,
+.field select,
+.field textarea {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  color: var(--ink);
+  padding: 7px 9px;
+  resize: vertical;
+  width: 100%;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--ink-3);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  border-color: var(--accent);
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -1px;
+}
+
+.field-inline {
+  font-size: 13px;
+}
+
+.note {
+  color: var(--ink-3);
+  font-size: 12px;
+  margin: 0;
+}
+
+/* ---------- suggested pick ---------- */
+
+.suggested {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-1);
+  display: flex;
+  gap: 12px;
+  padding: 10px 14px;
+}
+
+.suggested-label {
+  color: var(--accent-ink);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.suggested-body {
+  align-items: center;
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.suggested-name {
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.suggested-reason {
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.suggested-stats {
+  color: var(--ink-2);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.suggested-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+/* ---------- watch strip ---------- */
+
+.watchstrip {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.watchstrip-label {
+  color: var(--ink-3);
+  font-size: 12px;
+}
+
+.watch-chip {
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  display: inline-flex;
+  font-size: 12px;
+  padding: 2px 4px 2px 8px;
+}
+
+.watch-chip-main {
+  align-items: center;
+  background: none;
+  border: none;
+  color: var(--ink-2);
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 12px;
+  gap: 6px;
+  padding: 2px 4px;
+}
+
+.watch-chip-main:hover {
+  color: var(--ink);
+}
+
+.star-col {
+  padding: 0 2px 0 8px;
+  width: 30px;
+}
+
+.star {
+  background: none;
+  border: none;
+  color: var(--ink-3);
+  cursor: pointer;
+  font-size: 14px;
+  opacity: 0.55;
+  padding: 2px 4px;
+}
+
+.star:hover {
+  opacity: 1;
+}
+
+.star.on {
+  color: var(--star);
+  opacity: 1;
+}
+
+tr.cursor {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+}
+
+/* ---------- toast ---------- */
+
+.toast {
+  align-items: center;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  bottom: 22px;
+  box-shadow: var(--shadow-2);
+  color: var(--ink);
+  display: flex;
+  gap: 14px;
+  left: 50%;
+  padding: 10px 16px;
+  position: fixed;
+  transform: translateX(-50%);
+  z-index: 40;
+}
+
+/* ---------- top nav + content pages ---------- */
+
+.topnav {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.nav-link {
+  background: none;
+  border: none;
+  border-radius: var(--radius);
+  color: var(--ink-3);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 6px 10px;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+}
+
+.nav-link.on {
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.page {
+  line-height: 1.7;
+  margin: 0 auto;
+  max-width: 760px;
+  padding: 28px 20px 60px;
+}
+
+.page h1 {
+  font-size: 24px;
+  letter-spacing: -0.02em;
+  margin: 0 0 6px;
+}
+
+.page h2 {
+  border-top: 1px solid var(--line);
+  font-size: 16px;
+  letter-spacing: -0.02em;
+  margin: 28px 0 10px;
+  padding-top: 18px;
+}
+
+.page-lead {
+  color: var(--ink-2);
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.page ol,
+.page ul {
+  margin: 8px 0;
+  padding-left: 22px;
+}
+
+.page li {
+  margin-bottom: 7px;
+}
+
+.page kbd {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink-2);
+  font-size: 12px;
+  padding: 1px 6px;
+}
+
+.page code {
+  background: var(--surface-2);
+  border-radius: 6px;
+  font-size: 13px;
+  padding: 1px 5px;
+}
+
+.page a {
+  color: var(--accent-ink);
+}
+
+.page .glossary li {
+  margin-bottom: 9px;
+}
+
+.page .note {
+  border-top: 1px solid var(--line);
+  margin-top: 24px;
+  padding-top: 14px;
+}
+
+/* ---------- board / removed tabs ---------- */
+
+.view-tabs {
+  display: inline-flex;
+  gap: 2px;
+}
+
+.view-tab {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--ink-2);
+  cursor: pointer;
+  font-size: 13px;
+  padding: 6px 14px;
+}
+
+.view-tab:first-child {
+  border-radius: var(--radius) 0 0 var(--radius);
+}
+
+.view-tab:last-child {
+  border-left: none;
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+.view-tab.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.removed-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px;
+}
+
+.removed-row {
+  align-items: center;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 10px;
+  padding: 7px 8px;
+}
+
+.removed-row:last-child {
+  border-bottom: none;
+}
+
+.removed-when {
+  color: var(--ink-3);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  width: 70px;
+}
+
+.removed-name {
+  align-items: center;
+  display: inline-flex;
+  flex: 1;
+  gap: 6px;
+  font-weight: 600;
+}
+
+.removed-team {
+  color: var(--ink-3);
+  font-size: 12px;
+  width: 42px;
+}
+
+.removed-vor {
+  color: var(--ink-2);
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+  width: 84px;
+}
+
+.removed-note {
+  border-top: 1px solid var(--line);
+  padding: 10px 14px;
+}
+
+/* ---------- roster config + inline results ---------- */
+
+.slot-actions {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 6px;
+}
+
+.btn.icon {
+  border-radius: 6px;
+  font-size: 12px;
+  line-height: 1;
+  padding: 3px 6px;
+}
+
+.parse-ok {
+  color: var(--good) !important;
+}
+
+.parse-bad {
+  color: var(--bad) !important;
+}
+
+.roster-head {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.roster-actions {
+  display: inline-flex;
+  gap: 6px;
+}
+
+.roster-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.roster-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.roster-cell > span {
+  color: var(--ink-3);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+}
+
+.roster-cell input {
+  text-align: center;
+}
+
+.result {
+  border-radius: var(--radius);
+  font-size: 13px;
+  margin: 0;
+  padding: 8px 10px;
+}
+
+.result.good {
+  background: var(--good-soft);
+  color: var(--good);
+}
+
+.result.bad {
+  background: var(--bad-soft);
+  color: var(--bad);
+}
+
+.spacer {
+  flex: 1;
+}
