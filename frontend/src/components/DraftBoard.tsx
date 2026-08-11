@@ -30,7 +30,9 @@ interface Props {
   onToggleStar: (player: Player) => void;
   cursorId: string | null;
   showDrafted: boolean;
-  /** Mobile only: open the Player sheet. TODO(integration): wire from App. */
+  /** Mobile only: a row-body tap opens the Player sheet (DraftPage wires this
+   *  to `useSheets().openPlayer`). Optional so the desktop table path, which
+   *  has no sheet layer, needs no ceremony. */
   onOpenPlayer?: (player: Player) => void;
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useIsMobile } from '../hooks/useIsMobile';
 import type { Player } from '../types';
 
 export interface ToastState {
@@ -14,8 +15,15 @@ interface Props {
 }
 
 const TOAST_MS = 5000;
+/**
+ * Longer on a phone (FINAL DECISION 3). Undo is the safety net for the one-tap
+ * removal that fires ~176× a draft, and on a small screen the user has far less
+ * peripheral view of the list to notice a wrong one.
+ */
+const TOAST_MS_MOBILE = 8000;
 
 export default function Toast({ toast, onUndo, onDismiss }: Props) {
+  const isMobile = useIsMobile();
   // App passes a fresh `onDismiss` identity every render, so listing it here
   // cleared and restarted the timer on every App render — sync polls, the
   // `now` interval, any state change. The dismissal window was not 5s, it was
@@ -26,9 +34,12 @@ export default function Toast({ toast, onUndo, onDismiss }: Props) {
 
   useEffect(() => {
     if (!toast) return undefined;
-    const timer = window.setTimeout(() => dismissRef.current(), TOAST_MS);
+    const timer = window.setTimeout(
+      () => dismissRef.current(),
+      isMobile ? TOAST_MS_MOBILE : TOAST_MS,
+    );
     return () => window.clearTimeout(timer);
-  }, [toast]);
+  }, [toast, isMobile]);
 
   if (!toast) return null;
   return (

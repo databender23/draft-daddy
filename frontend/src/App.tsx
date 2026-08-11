@@ -12,8 +12,10 @@ import { byeCountsFor } from './lib/context';
 import { suggestPick } from './lib/suggest';
 import SettingsDrawer from './components/SettingsDrawer';
 import TopBar from './components/TopBar';
+import MobileChrome from './components/mobile/MobileChrome';
 import { useBoardKeys } from './hooks/useBoardKeys';
 import { useIsMobile } from './hooks/useIsMobile';
+import { useSheets } from './hooks/useSheets';
 import { useDraftSync, hasCreds } from './hooks/useDraftSync';
 import type { SortKey } from './lib/board';
 import { DEFAULT_SORT, defaultDirFor, matchesSearch, sortPlayers } from './lib/board';
@@ -33,6 +35,7 @@ import { POSITIONS } from './types';
 export default function App() {
   const [initial] = useState(loadInitial);
   const isMobile = useIsMobile();
+  const sheets = useSheets();
 
   const [scoring, setScoring] = useState<Scoring>('PPR');
   const [avg, setAvg] = useState<AvgMethod>('average');
@@ -54,6 +57,8 @@ export default function App() {
   const [toast, setToast] = useState<ToastState | null>(null);
   const [search, setSearch] = useState('');
   const [posFilter, setPosFilter] = useState<PosFilter>('ALL');
+  /** Backs the rail's `★ n` chip — WatchStrip's whole job at zero pixels (§2I). */
+  const [watchOnly, setWatchOnly] = useState(false);
   const [showDrafted, setShowDrafted] = useState(false);
   const [sort, setSort] = useState(DEFAULT_SORT);
   const [settingsOpen, setSettingsOpen] = useState(false);
@@ -99,12 +104,14 @@ export default function App() {
     savePointer(settings.leagueId, settings.season);
   }, [settings, manual, mine, dismissed, removedAt, starred]);
 
+  // Drives the "3m ago" column, on the desktop Removed tab and in its mobile
+  // sheet equivalent; idle whenever neither is on screen.
   useEffect(() => {
-    if (view !== 'removed') return undefined;
+    if (view !== 'removed' && sheets.sheet !== 'removed') return undefined;
     const timer = window.setInterval(() => setNow(Date.now()), 15000);
     setNow(Date.now());
     return () => window.clearInterval(timer);
-  }, [view]);
+  }, [view, sheets.sheet]);
 
   const byId = useMemo(() => new Map(players.map((p) => [p.id, p])), [players]);
 
@@ -164,11 +171,12 @@ export default function App() {
     const rows = players.filter((player) => {
       if (dismissed.includes(player.pos)) return false;
       if (posFilter !== 'ALL' && player.pos !== posFilter) return false;
+      if (watchOnly && !starred.has(player.id)) return false;
       if (!showDrafted && draftedIds.has(player.id)) return false;
       return matchesSearch(player, query);
     });
     return sortPlayers(rows, sort);
-  }, [players, dismissed, posFilter, showDrafted, draftedIds, search, sort]);
+  }, [players, dismissed, posFilter, watchOnly, starred, showDrafted, draftedIds, search, sort]);
 
   const maxVor = useMemo(
     () => players.reduce((acc, p) => Math.max(acc, p.vor ?? 0), 0),
@@ -295,24 +303,47 @@ export default function App() {
   return (
     <TooltipProvider teams={teams} byeCounts={byeCounts}>
     <div className="app">
-      <TopBar
-        page={page}
-        onPage={setPage}
-        scoring={scoring}
-        avg={avg}
-        onScoring={setScoring}
-        onAvg={setAvg}
-        live={settings.live}
-        onLive={(value) => applySettings({ ...settings, live: value })}
-        credsReady={hasCreds(settings)}
-        status={sync.data?.status ?? null}
-        tap={sync.data?.tap ?? null}
-        lastSync={sync.lastSync}
-        syncing={sync.syncing}
-        error={sync.error}
-        onSyncNow={() => void sync.runSync()}
-        onOpenSettings={() => setSettingsOpen(true)}
-      />
+      {isMobile ? (
+        <MobileChrome
+          sheets={sheets}
+          availableCount={undrafted.length}
+          scoring={scoring}
+          avg={avg}
+          onScoring={setScoring}
+          onAvg={setAvg}
+          onPage={setPage}
+          onOpenSettings={() => setSettingsOpen(true)}
+          status={sync.data?.status ?? null}
+          tap={sync.data?.tap ?? null}
+          lastSync={sync.lastSync}
+          syncing={sync.syncing}
+          error={sync.error}
+          live={settings.live}
+          credsReady={hasCreds(settings)}
+          onLive={(value) => applySettings({ ...settings, live: value })}
+          onSyncNow={() => void sync.runSync()}
+          unmatched={unmatched}
+        />
+      ) : (
+        <TopBar
+          page={page}
+          onPage={setPage}
+          scoring={scoring}
+          avg={avg}
+          onScoring={setScoring}
+          onAvg={setAvg}
+          live={settings.live}
+          onLive={(value) => applySettings({ ...settings, live: value })}
+          credsReady={hasCreds(settings)}
+          status={sync.data?.status ?? null}
+          tap={sync.data?.tap ?? null}
+          lastSync={sync.lastSync}
+          syncing={sync.syncing}
+          error={sync.error}
+          onSyncNow={() => void sync.runSync()}
+          onOpenSettings={() => setSettingsOpen(true)}
+        />
+      )}
 
       {page === 'help' && <HelpPage />}
       {page === 'strategy' && <StrategyPage />}
@@ -377,6 +408,13 @@ export default function App() {
           teamName={teamName}
           rosterConfig={settings.roster}
           onNotMine={notMine}
+          isMobile={isMobile}
+          sheets={sheets}
+          byId={byId}
+          teams={teams}
+          byeCounts={byeCounts}
+          watchOnly={watchOnly}
+          onWatchToggle={() => setWatchOnly((value) => !value)}
         />
       )}
 

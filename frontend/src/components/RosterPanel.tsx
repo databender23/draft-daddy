@@ -1,3 +1,4 @@
+import { useIsMobile } from '../hooks/useIsMobile';
 import { fmtNum } from '../lib/format';
 import { buildRoster, filledPositions } from '../lib/roster';
 import type { Player, Pos, RosterConfig } from '../types';
@@ -23,6 +24,7 @@ export default function RosterPanel({
   onNotMine,
   onRestore,
 }: Props) {
+  const isMobile = useIsMobile();
   const roster = buildRoster(players, config);
   const suggestions = filledPositions(roster).filter((pos) => !dismissed.includes(pos));
 
@@ -112,10 +114,13 @@ export default function RosterPanel({
         </>
       )}
 
+      {/* There are no modifier keys on touch, so the mobile copy names the two
+          gestures that actually exist there (docs/mobile-design.md §4). */}
       {players.length === 0 && (
         <p className="panel-empty">
-          Mark picks as yours with the “Mine” button (or Alt/Cmd-click Draft). ESPN picks for your
-          team land here automatically once synced.
+          {isMobile
+            ? 'Mark picks as yours by swiping a player right, or tapping them and choosing “Mine”. ESPN picks for your team land here automatically once synced.'
+            : 'Mark picks as yours with the “Mine” button (or Alt/Cmd-click Draft). ESPN picks for your team land here automatically once synced.'}
         </p>
       )}
     </aside>

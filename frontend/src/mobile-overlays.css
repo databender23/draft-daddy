@@ -1,0 +1,462 @@
+/* ============================================================================
+   MOBILE OVERLAY LAYER 2 — the two biggest surfaces: the My Pick cockpit and
+   the full-screen search overlay.
+
+   Third of the four mobile stylesheets (mobile.css → mobile-sheets.css →
+   this → mobile-panels.css), split purely for the 500-line repo ceiling that
+   docs/mobile-design.md §9 risk 8 anticipated. Same media query, same cascade
+   position; must stay at src/ top level so check-theme.mjs's non-recursive
+   scan covers it.
+
+   No raw colors — every value resolves through the tokens in styles.css.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* ---------- My Pick sheet (§4) ---------- */
+
+  /* 1. the suggestion, in full */
+
+  .mypick-sug {
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 10px 12px 12px;
+  }
+
+  .mypick-sug-label {
+    color: var(--accent-ink);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .mypick-sug-head {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .mypick-sug-name {
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mypick-sug-reason {
+    color: var(--ink-2);
+    font-size: 12px;
+  }
+
+  .mypick-sug-stats {
+    color: var(--ink-2);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .mypick-sug-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  /* Doubled class so it also outranks `.btn.primary`'s padding. */
+  .btn.mypick-act {
+    align-items: center;
+    display: flex;
+    font-size: 15px;
+    font-weight: 600;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 12px;
+    width: 100%;
+  }
+
+  .mypick-empty {
+    color: var(--ink-3);
+    font-size: 13px;
+    margin: 0;
+  }
+
+  /* 2. needs line */
+
+  .mypick-needs {
+    align-items: center;
+    color: var(--ink-2);
+    display: flex;
+    font-size: 13px;
+    gap: 6px;
+    margin: 12px 0 0;
+  }
+
+  .mypick-needs-label {
+    color: var(--ink);
+    font-weight: 700;
+  }
+
+  .mypick-bench {
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* 3 & 4. best available / watching */
+
+  .mypick-head {
+    border-top: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    margin: 16px 0 8px;
+    padding-top: 14px;
+    text-transform: uppercase;
+  }
+
+  .mypick-ba {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .mypick-line {
+    align-items: center;
+    display: flex;
+    min-height: 48px;
+  }
+
+  .mypick-line + .mypick-line {
+    border-top: 1px solid var(--line);
+  }
+
+  /* The "none left" line has no inner button to carry the gutter. */
+  .mypick-line > .badge {
+    margin-left: 10px;
+  }
+
+  .mypick-line-main {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    flex: 1;
+    gap: 8px;
+    min-height: 48px;
+    min-width: 0;
+    padding: 0 10px;
+    text-align: left;
+  }
+
+  .mypick-line-main:active {
+    background: var(--hover-wash);
+  }
+
+  .mypick-name {
+    color: var(--ink);
+    flex: 1;
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mypick-vor {
+    color: var(--ink);
+    font-size: 14px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 700;
+  }
+
+  .mypick-range {
+    color: var(--ink-3);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .mypick-none {
+    color: var(--ink-3);
+    font-size: 13px;
+    padding-left: 8px;
+  }
+
+  .mypick-mine {
+    -webkit-tap-highlight-color: transparent;
+    background: none;
+    border: 0;
+    border-left: 1px solid var(--line);
+    color: var(--accent-ink);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    min-height: 48px;
+    min-width: 60px;
+  }
+
+  .mypick-mine:active {
+    background: var(--accent-soft);
+  }
+
+  .mypick-x {
+    -webkit-tap-highlight-color: transparent;
+    background: none;
+    border: 0;
+    border-left: 1px solid var(--line);
+    color: var(--ink-3);
+    cursor: pointer;
+    font-size: 14px;
+    min-height: 48px;
+    width: 44px;
+  }
+
+  /* FINAL DECISION 6: positions whose starter slots are all filled stay in the
+     list (desktop parity) but read as --ink-3. */
+  .mypick-dim .mypick-name,
+  .mypick-dim .mypick-vor,
+  .mypick-dim .mypick-range,
+  .mypick-dim .mypick-mine {
+    color: var(--ink-3);
+  }
+
+  .mypick-dim .badge {
+    opacity: 0.5;
+  }
+
+  /* ---------- search overlay (full-screen, keyboard-aware) — §4 ----------
+     `.searchov`'s `bottom` is written INLINE by the component from
+     useKeyboardInset(); never set `bottom`/`inset` here or the input drops
+     behind the keyboard. */
+
+  .searchov {
+    background: var(--page);
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    /* above the dock (30) and any sheet (60) — search is modal over everything */
+    z-index: 70;
+  }
+
+  .searchov-head {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    flex: 0 0 auto;
+    height: 48px;
+    justify-content: space-between;
+    padding: 0 8px 0 16px;
+  }
+
+  .searchov-title {
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 700;
+  }
+
+  .searchov-done {
+    -webkit-tap-highlight-color: transparent;
+    background: none;
+    border: 0;
+    color: var(--accent-ink);
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 44px;
+    padding: 0 12px;
+  }
+
+  .searchov-list {
+    -webkit-overflow-scrolling: touch;
+    flex: 1 1 auto;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .searchov-hint {
+    color: var(--ink-3);
+    font-size: 13px;
+    margin: 0;
+    padding: 16px;
+  }
+
+  .searchov-row {
+    align-items: center;
+    border-bottom: 1px solid var(--line);
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 18px auto minmax(0, 1fr) auto 44px 48px;
+    height: 56px;
+    padding: 0 12px;
+  }
+
+  .searchov-rank {
+    color: var(--ink-3);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+  }
+
+  .searchov-name {
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .searchov-team {
+    color: var(--ink-3);
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .searchov-vor {
+    color: var(--ink);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    text-align: right;
+  }
+
+  .searchov-x {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 16px;
+    height: 48px;
+    justify-content: center;
+    padding: 0;
+    width: 48px;
+  }
+
+  /* CONFIRM BAR — the top match, thumb-adjacent, directly above the input. */
+  .searchov-confirm {
+    background: var(--surface);
+    border-top: 2px solid var(--accent);
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px 12px;
+  }
+
+  .searchov-confirm-who {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .searchov-confirm-name {
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 700;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .searchov-confirm-acts {
+    display: flex;
+    gap: 8px;
+  }
+
+  .searchov-remove,
+  .searchov-mine {
+    -webkit-tap-highlight-color: transparent;
+    border-radius: var(--radius);
+    cursor: pointer;
+    font-size: 15px;
+    min-height: 48px;
+  }
+
+  .searchov-remove {
+    background: var(--surface-2);
+    border: 1px solid var(--line-2);
+    color: var(--ink);
+    flex: 1 1 auto;
+    font-weight: 600;
+  }
+
+  .searchov-mine {
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    color: var(--on-accent);
+    flex: 0 0 104px;
+    font-weight: 700;
+  }
+
+  /* INPUT — pinned above the keyboard by the overlay's inline `bottom`. */
+  .searchov-inputrow {
+    align-items: center;
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex: 0 0 auto;
+    gap: 8px;
+    min-height: 52px;
+    padding: 6px 12px calc(6px + env(safe-area-inset-bottom));
+  }
+
+  .searchov-ico {
+    color: var(--ink-3);
+    font-size: 14px;
+  }
+
+  .searchov-input {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    color: var(--ink);
+    flex: 1 1 auto;
+    /* Fix 1: below 16px iOS Safari zooms on focus and does not zoom back out. */
+    font-size: 16px;
+    min-height: 44px;
+    min-width: 0;
+    padding: 0 10px;
+  }
+
+  .searchov-input::placeholder {
+    color: var(--ink-3);
+  }
+
+  .searchov-clear {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--ink-2);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 14px;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    width: 44px;
+  }
+}

@@ -164,4 +164,315 @@
     position: static;
     top: auto;
   }
+
+  /* ---------- Player sheet (§4) ---------- */
+
+  /* The one sheet whose title IS its subject, so §4's 18px header name applies
+     here only. Scoped with :has() so no other sheet's title changes; where
+     :has() is unsupported the rule drops and the title stays at 16px. */
+  .sheet:has(.psheet) .sheet-title {
+    font-size: 18px;
+  }
+
+  /* pos badge · tier · TEAM · RB4 · ⚠/⚡ · MINE, star pushed to the right. */
+  .psheet-id {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    min-height: 44px;
+    padding-bottom: 6px;
+  }
+
+  .psheet-meta {
+    color: var(--ink-3);
+    font-size: 12px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* The only starring affordance on mobile (§5 action 12). */
+  .psheet-star {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    color: var(--ink-3);
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 20px;
+    height: 44px;
+    justify-content: center;
+    margin-left: auto;
+    padding: 0;
+    width: 44px;
+  }
+
+  .psheet-star.on {
+    color: var(--star);
+  }
+
+  .psheet-callouts {
+    margin-top: 4px;
+  }
+
+  /* Everything the 64px row had to drop, as a 2-column definition list. */
+  .psheet-stats {
+    display: grid;
+    gap: 0 16px;
+    grid-template-columns: 1fr 1fr;
+    margin: 12px 0 0;
+  }
+
+  .psheet-stat {
+    align-items: baseline;
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    gap: 8px;
+    justify-content: space-between;
+    padding: 8px 0;
+  }
+
+  .psheet-dt {
+    color: var(--ink-3);
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .psheet-dd {
+    color: var(--ink);
+    font-size: 15px;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .psheet-act {
+    -webkit-tap-highlight-color: transparent;
+    min-height: 48px;
+  }
+
+  .psheet-mine {
+    flex: 0 0 104px;
+    font-size: 15px;
+  }
+
+  .psheet-out,
+  .psheet-undo {
+    flex: 1;
+  }
+
+  /* ---------- Board options sheet (SortSheet) ---------- */
+
+  .sortsheet-group {
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+    padding-top: 8px;
+  }
+
+  .sortsheet-group:first-child {
+    border-top: 0;
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .sortsheet-label,
+  .menusheet-label {
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  .sortsheet-label {
+    padding: 4px 8px;
+  }
+
+  .sortsheet-row,
+  .sortsheet-switch {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    border-radius: var(--radius);
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    font: inherit;
+    font-size: 15px;
+    gap: 8px;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 0 8px;
+    text-align: left;
+    width: 100%;
+  }
+
+  .sortsheet-row:active,
+  .sortsheet-switch:active {
+    background: var(--hover-wash);
+  }
+
+  .sortsheet-row.on {
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .sortsheet-name {
+    align-items: center;
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .sortsheet-dir {
+    align-items: center;
+    color: var(--accent-ink);
+    display: flex;
+    flex: 0 0 auto;
+    font-size: 13px;
+    font-weight: 700;
+    gap: 6px;
+  }
+
+  .sortsheet-dirtext {
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .sortsheet-hint {
+    color: var(--ink-3);
+    font-size: 11px;
+    margin: 0;
+    padding: 6px 8px 2px;
+  }
+
+  .sortsheet-switch input {
+    accent-color: var(--accent);
+    flex: 0 0 auto;
+    height: 22px;
+    margin: 0;
+    width: 22px;
+  }
+
+  .sortsheet-action {
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+
+  .sortsheet-meta {
+    color: var(--ink-3);
+    flex: 0 0 auto;
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* ---------- Menu sheet (☰) ---------- */
+
+  .menusheet-group {
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 14px;
+  }
+
+  .menusheet-group + .menusheet-group {
+    padding-top: 14px;
+  }
+
+  .menusheet-label {
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .menusheet-seg {
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    display: grid;
+    grid-auto-columns: 1fr;
+    grid-auto-flow: column;
+    overflow: hidden;
+  }
+
+  .menusheet-seg-btn {
+    -webkit-tap-highlight-color: transparent;
+    background: none;
+    border: 0;
+    border-right: 1px solid var(--line);
+    color: var(--ink-2);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 44px;
+    padding: 0 6px;
+    text-transform: capitalize;
+  }
+
+  .menusheet-seg-btn:last-child {
+    border-right: 0;
+  }
+
+  .menusheet-seg-btn.on {
+    background: var(--accent);
+    color: var(--on-accent);
+  }
+
+  .menusheet-hint {
+    background: var(--warn-soft);
+    border-radius: var(--radius);
+    color: var(--warn);
+    font-size: 12px;
+    line-height: 1.4;
+    margin: 8px 0 0;
+    padding: 8px 10px;
+  }
+
+  .menusheet-nav {
+    display: flex;
+    flex-direction: column;
+    padding-top: 4px;
+  }
+
+  .menusheet-row {
+    -webkit-tap-highlight-color: transparent;
+    align-items: center;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    color: var(--ink);
+    cursor: pointer;
+    display: flex;
+    font-size: 15px;
+    font-weight: 600;
+    gap: 8px;
+    justify-content: space-between;
+    min-height: 48px;
+    padding: 0 2px;
+    text-align: left;
+  }
+
+  .menusheet-row:last-child {
+    border-bottom: 0;
+  }
+
+  .menusheet-row:active {
+    background: var(--hover-wash);
+  }
+
+  .menusheet-value {
+    color: var(--accent-ink);
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .menusheet-chevron {
+    color: var(--ink-3);
+    font-size: 18px;
+    line-height: 1;
+  }
 }

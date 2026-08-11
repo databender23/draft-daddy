@@ -7,9 +7,13 @@ import type { RemovedEntry } from './RemovedPanel';
 import RosterPanel from './RosterPanel';
 import SuggestedPick from './SuggestedPick';
 import WatchStrip from './WatchStrip';
+import BoardOverlays from './mobile/BoardOverlays';
+import MobileStrip from './mobile/MobileStrip';
 import type { PosFill } from './mobile/ChipRail';
+import { sortLabelFor } from './mobile/SortSheet';
+import type { Sheets } from '../hooks/useSheets';
 import type { SortKey, SortState } from '../lib/board';
-import { COLUMNS } from '../lib/board';
+import type { TeamMap } from '../lib/context';
 import { buildRoster } from '../lib/roster';
 import type { Suggestion } from '../lib/suggest';
 import type {
@@ -72,6 +76,15 @@ interface Props {
   teamName: string | null;
   rosterConfig: RosterConfig;
   onNotMine: (player: Player) => void;
+
+  /* mobile layer (below 640px) */
+  isMobile: boolean;
+  sheets: Sheets;
+  byId: Map<string, Player>;
+  teams: TeamMap;
+  byeCounts: Map<number, number>;
+  watchOnly: boolean;
+  onWatchToggle: () => void;
 }
 
 /**
@@ -97,6 +110,11 @@ function posFill(players: Player[], config: RosterConfig): Partial<Record<Pos, P
  * The draft page itself: sync/load banners, the filter bar and the two-column
  * board + roster layout. Pure composition — every value and callback is a prop,
  * so all draft state stays in App.
+ *
+ * Below 640px the same props drive a different arrangement: the four always-on
+ * components (SuggestedPick, WatchStrip, BestAvailable, RosterPanel) collapse
+ * into the suggested strip and the dock's sheets (docs/mobile-design.md §2G,
+ * §6), and the desktop banners that were re-homed into sheets stop rendering.
  */
 export default function DraftPage({
   loadError,
@@ -142,15 +160,34 @@ export default function DraftPage({
   teamName,
   rosterConfig,
   onNotMine,
+  isMobile,
+  sheets,
+  byId,
+  teams,
+  byeCounts,
+  watchOnly,
+  onWatchToggle,
 }: Props) {
-  const sortLabel = COLUMNS.find((column) => column.key === sort.key)?.label ?? sort.key;
+  const sortLabel = sortLabelFor(sort.key);
   const fill = useMemo(() => posFill(myPlayers, rosterConfig), [myPlayers, rosterConfig]);
+
+  // The search overlay commits on `results[0]`, so it must never be handed a
+  // player who is already off the board — `rows` still contains them whenever
+  // `showDrafted` is on.
+  const searchResults = useMemo(
+    () => rows.filter((player) => !draftedIds.has(player.id)),
+    [rows, draftedIds],
+  );
 
   return (
     <>
       {loadError && <div className="banner bad">{loadError}</div>}
-      {syncError && <div className="banner bad">ESPN sync: {syncError}</div>}
-      {unmatched.length > 0 && (
+      {/* Both of these are re-homed into the Sync sheet on mobile (§6): a
+          full-width warn banner can be taller than the visible list on a
+          phone. The load-error banner above stays inline — losing the
+          projections is not something a sheet should bury. */}
+      {!isMobile && syncError && <div className="banner bad">ESPN sync: {syncError}</div>}
+      {!isMobile && unmatched.length > 0 && (
         <div className="banner warn">
           <strong>{unmatched.length} ESPN picks did not match the projections</strong>
           <span className="banner-list">
@@ -179,22 +216,27 @@ export default function DraftPage({
         sortLabel={sortLabel}
         fill={fill}
         watchCount={watching.length}
-        /* TODO(integration): the Board options sheet and the ★ watch-only
-           filter do not exist yet — these are inert until App owns the sheet
-           state machine and a `watchOnly` flag. */
-        onOpenOptions={() => {}}
-        watchOnly={false}
-        onWatchToggle={() => {}}
+        onOpenOptions={() => sheets.openSheet('options')}
+        watchOnly={watchOnly}
+        onWatchToggle={onWatchToggle}
       />
+
+      {isMobile && (
+        <MobileStrip suggestion={suggestion} onOpen={() => sheets.openSheet('mypick')} />
+      )}
 
       <main className="layout">
         <div className="main-col">
-          <SuggestedPick suggestion={suggestion} onDraft={onDraft} />
-          <WatchStrip players={watching} onFocus={onFocusPlayer} onUnstar={onToggleStar} />
-          <BestAvailable players={undrafted} positions={livePositions} onDraft={onDraft} />
+          {!isMobile && (
+            <>
+              <SuggestedPick suggestion={suggestion} onDraft={onDraft} />
+              <WatchStrip players={watching} onFocus={onFocusPlayer} onUnstar={onToggleStar} />
+              <BestAvailable players={undrafted} positions={livePositions} onDraft={onDraft} />
+            </>
+          )}
           {loading ? (
             <p className="empty">Loading projections…</p>
-          ) : view === 'removed' ? (
+          ) : !isMobile && view === 'removed' ? (
             <RemovedPanel
               entries={removedEntries}
               espnCount={espnCount}
@@ -217,22 +259,61 @@ export default function DraftPage({
               onToggleStar={onToggleStar}
               cursorId={cursorId}
               showDrafted={showDrafted}
-              /* TODO(integration): pass App's `openPlayer` once useSheets is
-                 mounted; until then a mobile row tap is inert. */
+              onOpenPlayer={(player) => sheets.openPlayer(player.id)}
             />
           )}
         </div>
-        <RosterPanel
-          players={myPlayers}
-          teamName={teamName}
-          dismissed={dismissed}
-          onDismiss={onDismissPos}
-          config={rosterConfig}
-          mineIds={myIds}
-          onNotMine={onNotMine}
-          onRestore={onUndo}
-        />
+        {!isMobile && (
+          <RosterPanel
+            players={myPlayers}
+            teamName={teamName}
+            dismissed={dismissed}
+            onDismiss={onDismissPos}
+            config={rosterConfig}
+            mineIds={myIds}
+            onNotMine={onNotMine}
+            onRestore={onUndo}
+          />
+        )}
       </main>
+
+      {isMobile && (
+        <BoardOverlays
+          sheets={sheets}
+          byId={byId}
+          teams={teams}
+          byeCounts={byeCounts}
+          starred={starred}
+          draftedIds={draftedIds}
+          myIds={myIds}
+          onToggleStar={onToggleStar}
+          onDraft={onDraft}
+          onUndo={onUndo}
+          suggestion={suggestion}
+          undrafted={undrafted}
+          livePositions={livePositions}
+          myPlayers={myPlayers}
+          rosterConfig={rosterConfig}
+          watching={watching}
+          search={search}
+          onSearch={onSearch}
+          searchResults={searchResults}
+          sort={sort}
+          onSort={onSort}
+          showDrafted={showDrafted}
+          onShowDrafted={onShowDrafted}
+          dismissed={dismissed}
+          onDismissPos={onDismissPos}
+          onRestorePos={onRestorePos}
+          teamName={teamName}
+          onNotMine={onNotMine}
+          removedEntries={removedEntries}
+          removedCount={removedCount}
+          espnCount={espnCount}
+          unmatched={unmatched}
+          now={now}
+        />
+      )}
     </>
   );
 }

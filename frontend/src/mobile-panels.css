@@ -1,0 +1,334 @@
+/* ============================================================================
+   MOBILE PANEL LAYER — the three surfaces that re-home an existing desktop
+   panel rather than introducing new markup: the Sync sheet, the Roster sheet
+   (RosterPanel verbatim), the Removed sheet (RemovedPanel verbatim), plus the
+   CSS-only bottom-sheet restyle of the settings drawer and the Help/Strategy
+   page's dock clearance.
+
+   Last of the four mobile stylesheets (mobile.css → mobile-sheets.css →
+   mobile-overlays.css → this). Split purely for the 500-line repo ceiling
+   (docs/mobile-design.md §9 risk 8). Must stay at src/ top level so
+   check-theme.mjs's non-recursive scan covers it.
+
+   panels.css is at 492/500 and board.css/chrome.css are untouched by contract —
+   every override to them lives here and wins by import order, not specificity.
+
+   No raw colors — every value resolves through the tokens in styles.css.
+   ========================================================================== */
+
+@media (max-width: 640px) {
+  /* ---------- Sync sheet (§4) ---------- */
+
+  /* Same .status-chip tone classes as TopBar and the app bar, scaled up: here
+     it is the sheet's headline, not chrome. */
+  .syncsheet-status {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .syncsheet-status .status-chip {
+    font-size: 14px;
+    font-weight: 600;
+    gap: 8px;
+    padding: 8px 14px;
+  }
+
+  .syncsheet-status .status-chip .dot {
+    height: 9px;
+    width: 9px;
+  }
+
+  .syncsheet-meta {
+    color: var(--ink-3);
+    font-size: 13px;
+  }
+
+  /* Sync error text lives in this sheet, not as a banner eating the board. */
+  .syncsheet-error {
+    background: var(--bad-soft);
+    border-left: 3px solid var(--bad);
+    border-radius: 0 var(--radius) var(--radius) 0;
+    color: var(--bad);
+    font-size: 13px;
+    margin-top: 12px;
+    padding: 10px 12px;
+  }
+
+  .syncsheet-live {
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+    padding-top: 4px;
+  }
+
+  .syncsheet-toggle {
+    align-items: center;
+    color: var(--ink);
+    font-size: 15px;
+    font-weight: 600;
+    min-height: 48px;
+  }
+
+  .syncsheet-toggle input {
+    height: 20px;
+    width: 20px;
+  }
+
+  .syncsheet-toggle input:disabled + span {
+    color: var(--ink-3);
+  }
+
+  .syncsheet-note {
+    color: var(--ink-3);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .syncsheet-sec {
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+    padding-top: 12px;
+  }
+
+  .syncsheet-sec-head {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .syncsheet-list {
+    list-style: none;
+    margin: 8px 0 0;
+    padding: 0;
+  }
+
+  .syncsheet-row {
+    align-items: center;
+    border-top: 1px solid var(--line);
+    display: flex;
+    gap: 8px;
+    min-height: 48px;
+    padding: 6px 0;
+  }
+
+  .syncsheet-row:first-child {
+    border-top: 0;
+  }
+
+  .syncsheet-name {
+    color: var(--ink);
+    flex: 1 1 auto;
+    font-size: 15px;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .syncsheet-team {
+    color: var(--ink-3);
+    flex: 0 0 auto;
+    font-size: 12px;
+  }
+
+  .syncsheet-sync {
+    flex: 1 1 auto;
+    font-size: 15px;
+    min-height: 48px;
+  }
+
+  /* ---------- Roster sheet — RosterPanel verbatim (§4) ---------- */
+
+  /* The Sheet already draws the surface; the panel must not draw a second one.
+     `position: static` is set in mobile-sheets.css (fix 4). */
+  .sheet .roster {
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+  }
+
+  /* 48px slot rows instead of the desktop 5px padding. */
+  .sheet .slot {
+    min-height: 48px;
+    padding: 6px 0;
+  }
+
+  .sheet .slot-name {
+    font-size: 15px;
+  }
+
+  /* §5 action 14: fixing a mis-marked pick must be a real target. */
+  .sheet .slot-actions {
+    gap: 6px;
+    margin-left: auto;
+  }
+
+  .sheet .slot-actions .btn.icon {
+    align-items: center;
+    display: inline-flex;
+    font-size: 15px;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    width: 44px;
+  }
+
+  /* The suggestion block is the primary per-position hide affordance now that
+     `.chip-x` is gone, so its buttons get real targets too. */
+  .sheet .suggest {
+    font-size: 13px;
+  }
+
+  .sheet .suggest-actions .btn {
+    min-height: 44px;
+  }
+
+  /* ---------- Removed sheet — RemovedPanel verbatim (§4) ---------- */
+
+  .removedsheet-summary {
+    color: var(--ink-2);
+    font-size: 13px;
+    margin: 0 0 10px;
+  }
+
+  .removedsheet-unmatched {
+    border-top: 1px solid var(--line);
+    margin-top: 12px;
+    padding-top: 10px;
+  }
+
+  .removedsheet-unmatched > summary {
+    color: var(--warn);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 700;
+    min-height: 44px;
+    padding: 12px 0;
+  }
+
+  .sheet .removed-panel {
+    background: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  .sheet .removed-list {
+    padding: 0;
+  }
+
+  /* Two lines: `[badge] Name [MINE]` over `3m ago · LVR · VOR 41.2`, with the
+     ↩ target pinned right across both rows. */
+  .sheet .removed-row {
+    align-items: center;
+    column-gap: 8px;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto 44px;
+    padding: 8px 0;
+    row-gap: 2px;
+  }
+
+  .sheet .removed-row > .badge {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .sheet .removed-name {
+    font-size: 15px;
+    grid-column: 2 / 4;
+    grid-row: 1;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .sheet .removed-when {
+    grid-column: 1;
+    grid-row: 2;
+    width: auto;
+  }
+
+  .sheet .removed-team {
+    grid-column: 2;
+    grid-row: 2;
+    width: auto;
+  }
+
+  .sheet .removed-vor {
+    grid-column: 3;
+    grid-row: 2;
+    font-size: 12px;
+    text-align: right;
+    width: auto;
+  }
+
+  /* `↩ Add back` becomes a 44×44 glyph target: the label is zeroed out and the
+     arrow re-drawn, so the accessible name in the DOM is untouched. */
+  .sheet .removed-row .btn {
+    align-items: center;
+    display: inline-flex;
+    font-size: 0;
+    grid-column: 4;
+    grid-row: 1 / 3;
+    height: 44px;
+    justify-content: center;
+    padding: 0;
+    width: 44px;
+  }
+
+  .sheet .removed-row .btn::before {
+    content: '↩';
+    font-size: 17px;
+  }
+
+  .sheet .removed-note {
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    padding: 10px 0 0;
+  }
+
+  .sheet .empty {
+    padding: 16px 0;
+    text-align: left;
+  }
+
+  /* ---------- settings drawer → bottom sheet (§4, CSS only) ---------- */
+
+  .drawer-backdrop {
+    align-items: flex-end;
+  }
+
+  .drawer {
+    border-left: 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    max-height: 92dvh;
+    padding-bottom: env(safe-area-inset-bottom);
+    width: 100%;
+  }
+
+  .roster-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .drawer-foot {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .drawer-foot .spacer {
+    display: none;
+  }
+
+  .drawer-foot .btn {
+    min-height: 48px;
+    width: 100%;
+  }
+
+  /* ---------- Help / Strategy pages ---------- */
+
+  /* The fixed dock would otherwise sit on the last paragraph. */
+  .page {
+    padding: 20px 16px calc(56px + env(safe-area-inset-bottom) + 24px);
+  }
+}
