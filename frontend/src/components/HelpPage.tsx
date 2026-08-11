@@ -113,7 +113,7 @@ export default function HelpPage() {
         </li>
         <li>
           <strong>Draft-room tap (beta):</strong> for true real-time picks, install the tap
-          userscript (Tampermonkey → open <code>/tap/draftiq-espn-tap.user.js</code> on this
+          userscript (Tampermonkey → open <code>/tap/draftdaddy-espn-tap.user.js</code> on this
           server), then click the <strong>IQ</strong> badge in ESPN&rsquo;s draft room and paste
           the key from Settings → Live draft tap. Picks stream in within seconds and a{' '}
           <strong>tap ⚡</strong> chip appears in the top bar. Practice any time in ESPN&rsquo;s

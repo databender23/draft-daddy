@@ -52,7 +52,7 @@ export function useSheets(): Sheets {
           // A sheet was reopened before the pop landed (close → open in quick
           // succession); restore the entry it expects and keep it open.
           pushed.current = true;
-          window.history.pushState({ draftiqSheet: true }, '');
+          window.history.pushState({ draftdaddySheet: true }, '');
         } else {
           pushed.current = false;
         }
@@ -71,7 +71,7 @@ export function useSheets(): Sheets {
     // it instead of pushing a second one (onPop re-pushes when it lands).
     if (!pushed.current && !popPending.current) {
       pushed.current = true;
-      window.history.pushState({ draftiqSheet: true }, '');
+      window.history.pushState({ draftdaddySheet: true }, '');
     } else if (popPending.current) {
       pushed.current = true;
     }

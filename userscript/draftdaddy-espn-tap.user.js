@@ -1,7 +1,9 @@
 // ==UserScript==
 // @name         Draft Daddy — ESPN Draft Tap
-// @namespace    https://draftiq.databender.co
-// @version      0.2.0
+// @namespace    https://draftdaddy.databender.co
+// @version      0.3.0
+// @downloadURL  https://draftdaddy.databender.co/tap/draftdaddy-espn-tap.user.js
+// @updateURL    https://draftdaddy.databender.co/tap/draftdaddy-espn-tap.user.js
 // @description  Relays live ESPN draft-room picks to your Draft Daddy board (read-only; never drafts for you).
 // @match        https://fantasy.espn.com/football/draft*
 // @match        https://lm.fantasy.espn.com/football/draft*
@@ -16,7 +18,7 @@
  * those frames on the page's own authenticated socket, and POSTs picks to
  * the Draft Daddy backend (/api/draft/events). It never sends anything to ESPN.
  *
- * Setup: click the "IQ" badge (bottom-right of the draft room) and paste the
+ * Setup: click the "DD" badge (bottom-right of the draft room) and paste the
  * tap key shown in Draft Daddy's Settings. For mock-lobby practice, override the
  * league/season to your board's league so picks land in the right bucket.
  */
@@ -24,9 +26,12 @@
 (function () {
   'use strict';
 
-  var CONFIG_KEY = 'draftiq:tap:config';
+  var CONFIG_KEY = 'draftdaddy:tap:config';
+  /** Pre-rename installs saved their config here; migrated on first load. */
+  var LEGACY_CONFIG_KEY = 'draftiq:tap:config';
   var FLUSH_MS = 1200;
-  var DEFAULT_ENDPOINT = 'https://draftiq.databender.co';
+  var DEFAULT_ENDPOINT = 'https://draftdaddy.databender.co';
+  var LEGACY_ENDPOINT = 'https://draftiq.databender.co';
 
   var urlParams = new URLSearchParams(window.location.search);
   var roomLeagueId = urlParams.get('leagueId') || '';
@@ -42,10 +47,16 @@
 
   function loadConfig() {
     try {
-      var raw = window.localStorage.getItem(CONFIG_KEY);
+      var raw =
+        window.localStorage.getItem(CONFIG_KEY) ||
+        window.localStorage.getItem(LEGACY_CONFIG_KEY);
       var cfg = raw ? JSON.parse(raw) : {};
+      var endpoint = cfg.endpoint || DEFAULT_ENDPOINT;
+      // The old domain 301s to the new one, but fetch() POSTs follow the
+      // redirect as GET in some engines — rewrite it instead of relying on it.
+      if (endpoint === LEGACY_ENDPOINT) endpoint = DEFAULT_ENDPOINT;
       return {
-        endpoint: cfg.endpoint || DEFAULT_ENDPOINT,
+        endpoint: endpoint,
         key: cfg.key || '',
         leagueId: cfg.leagueId || '',
         season: cfg.season || '',

@@ -10,7 +10,7 @@ The only cost is OAuth: you must register a Yahoo app once and set two env vars.
 1. Go to https://developer.yahoo.com/apps/create/ signed in as any Yahoo account.
 2. **Application Name**: anything (e.g. `Draft Daddy`).
 3. **Application Type**: `Installed Application`.
-4. **Redirect URI**: must be HTTPS. Production: `https://draftiq.databender.co/api/yahoo/callback`.
+4. **Redirect URI**: must be HTTPS. Production: `https://draftdaddy.databender.co/api/yahoo/callback`.
    For local dev Yahoo will not accept `http://localhost`, so either
    - add the production URI and test against prod, or
    - run local dev behind an HTTPS tunnel and set `YAHOO_REDIRECT_URI` to that URL.

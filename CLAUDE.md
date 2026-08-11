@@ -22,7 +22,7 @@ name/team/pos → CSV matching and the same board removal path.
   `backend/data/team_context.json` + `player_context.json`. See its README for the season runbook.
 - Single-container Docker deploy; no DB. Two OPTIONAL env vars (telemetry, below) — the app runs
   fully without them. `data-pipeline/` is excluded from the image. Production is AWS App Runner
-  at https://draftiq.databender.co; runbook in `docs/deploy-aws.md`.
+  at https://draftdaddy.databender.co; runbook in `docs/deploy-aws.md`.
 
 ## Commands
 
@@ -71,7 +71,7 @@ import time). Rebuild `dist/` before serving; restart uvicorn after swapping the
   In-memory per (league, season, key) buffer (`draft_events.py`): 12h TTL, deduped by provider
   player id when present else normalized name, an INIT replay never erases an overall a live
   SELECTED frame already set. `GET /api/draft/events` (same params as query) exists for
-  debugging. Fed by the draft-room userscript, served at `/tap/draftiq-espn-tap.user.js` (from
+  debugging. Fed by the draft-room userscript, served at `/tap/draftdaddy-espn-tap.user.js` (from
   `userscript/`, also COPY'd in the Dockerfile).
 - `GET /api/draft/live?league_id&season&key&scoring&avg` → `{tap, picks, unmatched}`. The
   provider-agnostic path: buffered tap picks matched to the board with NO provider API call.
@@ -197,11 +197,11 @@ purity plus both-blocks var coverage — and must pass before any UI change ship
   best-effort with short timeouts; failures are logged, never surfaced.
 - Telemetry carries no PII and must never touch ESPN cookie state.
 - Branding: the app is "Draft Daddy" (TopBar wordmark, page title, OG tags in index.html with the
-  share image at frontend/public/images/og-draftiq.png). A blog post draft promoting it lives at
+  share image at frontend/public/images/og-draftdaddy.png). A blog post draft promoting it lives at
   ../../website_dev/content-review/30-blog-draft-iq-2026.md (incl. the animated diagram) —
   wire into the site's blog-data.ts only after user approval.
 - Telemetry Slack ping is a Block Kit card mirroring the site's alert style (geo via ip-api.com,
   UA-parsed browser, session/visitor dedupe in memory — resets on container restart).
-- Deploy: `docs/deploy-aws.md` (ECR + App Runner at `draftiq.databender.co`, AWS CLI profile `default` (it IS the Databender account; a separate `databender` profile does not exist — account ID, service ARN and other account-specific values live in the gitignored `docs/deploy.local.md`),
+- Deploy: `docs/deploy-aws.md` (ECR + App Runner at `draftdaddy.databender.co`, AWS CLI profile `default` (it IS the Databender account; a separate `databender` profile does not exist — account ID, service ARN and other account-specific values live in the gitignored `docs/deploy.local.md`),
   us-east-2). Website-side prerequisite: the `draft` entry in the site's analytics route
   allowlist must be deployed or events are dropped.

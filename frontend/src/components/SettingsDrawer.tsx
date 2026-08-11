@@ -348,7 +348,7 @@ export default function SettingsDrawer({
                 ? 'Optional for Yahoo — its API already reports picks live. Only useful if you also want draft-room-side relaying.'
                 : 'Real-time picks straight from the draft room.'}{' '}
               Install the tap userscript (Tampermonkey, then open{' '}
-              <code>/tap/draftiq-espn-tap.user.js</code> on this server), click the DD badge in
+              <code>/tap/draftdaddy-espn-tap.user.js</code> on this server), click the DD badge in
               the draft room, and paste this key. Picks then land here in seconds — with polling
               and manual Remove as fallbacks. Keep the key private: anyone holding it could feed
               this board fake picks.

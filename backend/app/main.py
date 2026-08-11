@@ -2,8 +2,9 @@
 
 import os
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
@@ -22,6 +23,25 @@ USERSCRIPT_DIR = os.path.normpath(
 )
 
 app = FastAPI(title="Fantasy Draft Board", version="1.0.0")
+
+# 2026-08-11 rename: the old custom domain stays associated with the service so
+# shared links keep working, and every request to it 301s to the new name.
+# Exact host match only — health checks and the default awsapprunner host must
+# never redirect.
+LEGACY_HOST = "draftiq.databender.co"
+CANONICAL_ORIGIN = "https://draftdaddy.databender.co"
+
+
+@app.middleware("http")
+async def redirect_legacy_host(request: Request, call_next):
+    host = request.headers.get("host", "").split(":")[0].lower()
+    if host == LEGACY_HOST:
+        target = CANONICAL_ORIGIN + request.url.path
+        if request.url.query:
+            target += "?" + request.url.query
+        return RedirectResponse(target, status_code=301)
+    return await call_next(request)
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -133,6 +153,13 @@ async def draft_live(
             player_map = {}
     picks, unmatched, _ = _shape_picks(raw_picks, player_map, MatchIndex(board), "")
     return {"tap": tap, "picks": picks, "unmatched": unmatched}
+
+
+# Pre-rename Tampermonkey installs update from the old filename; the route must
+# be registered BEFORE the /tap static mount to win.
+@app.get("/tap/draftiq-espn-tap.user.js", include_in_schema=False)
+async def legacy_userscript() -> RedirectResponse:
+    return RedirectResponse("/tap/draftdaddy-espn-tap.user.js", status_code=301)
 
 
 if os.path.isdir(USERSCRIPT_DIR):

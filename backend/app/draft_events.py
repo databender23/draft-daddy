@@ -1,6 +1,6 @@
 """In-memory buffer for live-draft pick events relayed by the browser tap.
 
-The Tampermonkey userscript (userscript/draftiq-espn-tap.user.js) watches the
+The Tampermonkey userscript (userscript/draftdaddy-espn-tap.user.js) watches the
 ESPN draft room's WebSocket and POSTs picks here as they happen, because the
 league read API does not stream picks mid-draft (docs/live-draft-sync-research.md).
 Buffers are keyed by (league, season, tap key) so only a client holding the same

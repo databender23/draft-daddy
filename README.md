@@ -93,7 +93,7 @@ Adding a color means adding a token to both blocks — never a literal at the ca
 
 ## Hosting
 
-Production lives at **https://draftiq.databender.co** on AWS App Runner (single container, ECR
+Production lives at **https://draftdaddy.databender.co** on AWS App Runner (single container, ECR
 image, 0.25 vCPU / 0.5 GB). The full idempotent runbook — ECR, build/push, service creation,
 custom domain, Route 53 records, updates, costs, teardown — is in
 [`docs/deploy-aws.md`](docs/deploy-aws.md).

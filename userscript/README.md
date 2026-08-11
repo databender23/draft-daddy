@@ -14,9 +14,9 @@ ESPN and never drafts for you.
 1. Install the [Tampermonkey](https://www.tampermonkey.net/) browser extension
    (Chrome/Edge/Firefox — enable Developer Mode in `chrome://extensions` if
    Tampermonkey asks for it).
-2. Open `https://draftiq.databender.co/tap/draftiq-espn-tap.user.js` —
+2. Open `https://draftdaddy.databender.co/tap/draftdaddy-espn-tap.user.js` —
    Tampermonkey will offer to install it. (Local dev:
-   `http://localhost:8000/tap/draftiq-espn-tap.user.js`.)
+   `http://localhost:8000/tap/draftdaddy-espn-tap.user.js`.)
 3. In Draft Daddy → **Settings → Live draft tap**, copy the tap key.
 4. Open your ESPN draft room. Click the small **IQ** badge (bottom-right),
    paste the tap key, and confirm the league/season. The badge turns teal and

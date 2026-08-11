@@ -1,6 +1,6 @@
-# Deploy: draftiq.databender.co on AWS App Runner
+# Deploy: draftdaddy.databender.co on AWS App Runner
 
-Runbook to put this app at **https://draftiq.databender.co** using ECR + AWS App Runner in the
+Runbook to put this app at **https://draftdaddy.databender.co** using ECR + AWS App Runner in the
 Databender AWS account. Every step is idempotent — re-running a completed step is a no-op or a
 harmless UPSERT, so the runbook can be resumed from anywhere after a failure.
 
@@ -8,6 +8,11 @@ Read the whole thing once before running anything. Commands are literal; placeho
 `<ANGLE_BRACKETED>` and must be substituted. **Account-specific values (account ID, service
 ARN, hosted-zone ID, Amplify app ID) live in `docs/deploy.local.md` — gitignored, never
 committed. Copy them from there wherever a placeholder appears below.**
+
+> **Legacy domain (2026-08-11 rename):** `draftiq.databender.co` remains associated with the
+> service and keeps its Route 53 CNAME so old links resolve; the app itself 301s every
+> request on that Host to `https://draftdaddy.databender.co` (see `redirect_legacy_host` in
+> `backend/app/main.py`). Do not remove the old association without breaking shared links.
 
 | Fact | Value |
 | --- | --- |
@@ -74,13 +79,13 @@ Export these in the terminal you will run the rest of the runbook from. Re-expor
 open a new shell.
 
 ```bash
-export AWS_PROFILE=databender
+export AWS_PROFILE=default
 export AWS_REGION=us-east-2
 export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export REPO=draft-app
 export SERVICE=draft-app
 export ZONE_ID=<ZONE_ID>                  # from docs/deploy.local.md
-export DOMAIN=draftiq.databender.co
+export DOMAIN=draftdaddy.databender.co
 export ECR_URI="${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${REPO}"
 export IMAGE_TAG=$(date +%Y%m%d-%H%M)     # immutable, human-readable tag
 echo "$ECR_URI:$IMAGE_TAG"
@@ -117,7 +122,7 @@ export YAHOO_CLIENT_SECRET='<from developer.yahoo.com app>'
 Unset, `/api/yahoo/status` reports `configured:false` and the app runs Yahoo-less. **These are
 part of the same `RuntimeEnvironmentVariables` map as the telemetry vars — see the warning in §9:
 every deploy must pass the WHOLE map or the omitted vars are cleared.** The Yahoo app's registered
-redirect URI must be exactly `https://draftiq.databender.co/api/yahoo/callback`.
+redirect URI must be exactly `https://draftdaddy.databender.co/api/yahoo/callback`.
 
 ---
 
@@ -295,7 +300,7 @@ resolve.
 ## 7. Route 53 records (idempotent UPSERTs)
 
 This builds the change batch straight from the API response, so there is nothing to transcribe
-by hand. It writes both the ACM validation CNAMEs and the `draftiq.databender.co` CNAME.
+by hand. It writes both the ACM validation CNAMEs and the `draftdaddy.databender.co` CNAME.
 
 ```bash
 aws apprunner describe-custom-domains --service-arn "$SERVICE_ARN" --output json > /tmp/cd.json
@@ -319,7 +324,7 @@ aws route53 change-resource-record-sets --hosted-zone-id "$ZONE_ID" \
 
 Notes:
 
-- `draftiq.databender.co` gets a **CNAME**, not an alias — Route 53 has no alias target type for
+- `draftdaddy.databender.co` gets a **CNAME**, not an alias — Route 53 has no alias target type for
   App Runner. That is fine because it is a subdomain, not the zone apex.
 - `UPSERT` means re-running after a failed association (which mints new validation records) just
   overwrites the stale ones.
@@ -342,20 +347,20 @@ rm -f /tmp/cd.json /tmp/r53-batch.json
 
 ```bash
 # DNS resolves to the App Runner target
-dig +short draftiq.databender.co
+dig +short draftdaddy.databender.co
 
 # API health over the custom domain (TLS from ACM)
-curl -s https://draftiq.databender.co/api/health                     # {"status":"ok"}
+curl -s https://draftdaddy.databender.co/api/health                     # {"status":"ok"}
 
 # Board data loads (should be a large JSON body, not an error)
-curl -s 'https://draftiq.databender.co/api/players?scoring=PPR&avg=average' \
+curl -s 'https://draftdaddy.databender.co/api/players?scoring=PPR&avg=average' \
   | head -c 200; echo
 
 # SPA shell is served
-curl -s -o /dev/null -w '%{http_code}\n' https://draftiq.databender.co/     # 200
+curl -s -o /dev/null -w '%{http_code}\n' https://draftdaddy.databender.co/     # 200
 
 # Telemetry endpoint always answers 204, never an error
-curl -s -o /dev/null -w '%{http_code}\n' -X POST https://draftiq.databender.co/api/telemetry \
+curl -s -o /dev/null -w '%{http_code}\n' -X POST https://draftdaddy.databender.co/api/telemetry \
   -H 'content-type: application/json' \
   -d '{"visitor_id":"smoke","session_id":"smoke-1","referrer":"","screen_width":1440,
        "screen_height":900,"viewport_width":1440,"viewport_height":800,"utm":{}}'   # 204
@@ -363,7 +368,7 @@ curl -s -o /dev/null -w '%{http_code}\n' -X POST https://draftiq.databender.co/a
 
 Then confirm the end of the chain by hand:
 
-1. Open https://draftiq.databender.co in a real browser (this fires the frontend beacon once).
+1. Open https://draftdaddy.databender.co in a real browser (this fires the frontend beacon once).
 2. A `🏈 Draft board visitor` message lands in Slack (first sighting of that session id; the
    backend dedupes for 6h in memory, so a reload in the same tab will not re-ping).
 3. The visit appears in the site's admin analytics dashboard under `/draft`. If it does not,
@@ -373,8 +378,8 @@ Then confirm the end of the chain by hand:
 6. Provider endpoints answer:
 
 ```bash
-curl -s https://draftiq.databender.co/api/yahoo/status          # {"configured":true} once env vars set, else false
-curl -s -o /dev/null -w '%{http_code}\n' https://draftiq.databender.co/tap/draftiq-espn-tap.user.js  # 200
+curl -s https://draftdaddy.databender.co/api/yahoo/status          # {"configured":true} once env vars set, else false
+curl -s -o /dev/null -w '%{http_code}\n' https://draftdaddy.databender.co/tap/draftdaddy-espn-tap.user.js  # 200
 ```
 
 If Yahoo is configured, also click **Connect Yahoo** in Settings once and confirm the popup
@@ -493,7 +498,7 @@ aws apprunner delete-service --service-arn "$SERVICE_ARN"
 
 # remove the DNS records — same batch as step 7 with Action DELETE (values must match exactly)
 aws route53 list-resource-record-sets --hosted-zone-id "$ZONE_ID" \
-  --query "ResourceRecordSets[?contains(Name, 'draftiq.databender.co')]"
+  --query "ResourceRecordSets[?contains(Name, 'draftdaddy.databender.co')]"
 
 # optional
 aws ecr delete-repository --repository-name "$REPO" --force

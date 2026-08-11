@@ -1,13 +1,13 @@
 # Next steps & pending tasks
 
-Status as of 2026-08-06. The app is live at https://draftiq.databender.co (App Runner,
+Status as of 2026-08-06. The app is live at https://draftdaddy.databender.co (App Runner,
 analytics + Slack pings wired, Databender light/dark branding, Draft Daddy name + OG tags).
 
 ## Before draft day (highest priority)
 
 - [ ] **Test the draft-room tap in ESPN's mock draft lobby.** The tap is BUILT
-      (2026-08-07): `userscript/draftiq-espn-tap.user.js` (served at
-      `/tap/draftiq-espn-tap.user.js`) watches the draft room's WebSocket and POSTs picks
+      (2026-08-07): `userscript/draftdaddy-espn-tap.user.js` (served at
+      `/tap/draftdaddy-espn-tap.user.js`) watches the draft room's WebSocket and POSTs picks
       to `/api/draft/events`; the sync merge + Settings key UI + "tap ⚡" chip are wired
       and unit-tested end-to-end. Untested against a REAL ESPN draft room. Follow
       `userscript/README.md`: install via Tampermonkey, join a mock draft, override the
@@ -22,10 +22,10 @@ analytics + Slack pings wired, Databender light/dark branding, Draft Daddy name 
 
 ## Marketing (lead magnet)
 
-- [ ] Review + approve the blog post draft: `../website_dev/content-review/30-blog-draft-iq-2026.md`
+- [ ] Review + approve the blog post draft: `../website_dev/content-review/30-blog-draft-daddy-2026.md`
       (preview artifact from the session shows it rendered). Then wire into
       `website_dev/src/lib/blog-data.ts` + sitemap; needs a featuredImage decision.
-- [ ] LinkedIn post: run https://draftiq.databender.co through linkedin.com/post-inspector
+- [ ] LinkedIn post: run https://draftdaddy.databender.co through linkedin.com/post-inspector
       first to prime the OG card cache; use `?utm_source=linkedin` in the shared link so
       Slack pings and the analytics dashboard attribute traffic correctly.
 - [ ] Decide whether the marketing site should link to Draft Daddy after all (currently no
@@ -38,7 +38,7 @@ The Yahoo provider is fully built and deployed to prod, but dormant (`configured
 app or to test against. Nothing to do unless that changes. To pick it back up:
 
 - [ ] Register the Yahoo app at https://developer.yahoo.com/apps/create/ with redirect URI
-      `https://draftiq.databender.co/api/yahoo/callback` (walkthrough: `docs/yahoo-setup.md`),
+      `https://draftdaddy.databender.co/api/yahoo/callback` (walkthrough: `docs/yahoo-setup.md`),
       set `YAHOO_CLIENT_ID`/`YAHOO_CLIENT_SECRET` on App Runner via the jq-merge snippet in
       `docs/deploy-aws.md` §9 (preserves telemetry vars), then Connect Yahoo in Settings.
 - [ ] Test with a private Yahoo league + dummy team (mocks aren't API-readable; pre-draft
@@ -71,23 +71,16 @@ app or to test against. Nothing to do unless that changes. To pick it back up:
       testing, esp. the swipe gesture and keyboard-pinned search).
 - [x] Git repo — DONE 2026-08-10: public at github.com/databender23/draft-daddy.
 
-## Draft Daddy rename follow-ups (renamed from "Draft IQ" 2026-08-11)
+## Draft Daddy rename (from "Draft IQ") — COMPLETE 2026-08-11
 
-In-app strings, docs, Slack ping, userscript display name (v0.2.0), and the GitHub repo are
-renamed. Still pointing at the OLD name (all functional, change only as a coordinated move):
-
-- [ ] Domain: draftiq.databender.co is the live App Runner custom domain. If moving to
-      draftdaddy.databender.co: ACM cert + Route 53 CNAMEs (runbook §DNS), update og:url +
-      og:image URLs in index.html, userscript DEFAULT_ENDPOINT + @namespace, Yahoo redirect
-      URI (if/when Yahoo app exists), docs. Keep the old CNAME as a redirect if possible.
-- [ ] OG share image: frontend/public/images/og-draftiq.png has the old wordmark baked into
-      its pixels — regenerate (and consider renaming the file when the domain moves).
-- [ ] Userscript path /tap/draftiq-espn-tap.user.js: renaming the file touches the
-      Dockerfile COPY, main.py mount, SettingsDrawer + HelpPage copy, userscript README.
-      Existing Tampermonkey installs keep their saved config (localStorage key unchanged).
-- [ ] Blog draft ../website_dev/content-review/30-blog-draft-iq-2026.md still says Draft IQ
-      throughout — update before approving/publishing.
-- [ ] Redeploy App Runner so production shows the new name.
+Everything renamed and migrated: app strings, docs, Slack ping, GitHub repo (draft-iq →
+draft-daddy, redirects), domain (draftdaddy.databender.co primary; draftiq.databender.co
+stays associated and 301s via `redirect_legacy_host` in main.py — do NOT remove it),
+userscript (draftdaddy-espn-tap.user.js v0.3.0, old /tap/ filename 301s, old localStorage
+config auto-migrates), OG image regenerated (og-draftdaddy.png; the old og-draftiq.png is
+kept on disk for cached links), blog draft renamed to
+../website_dev/content-review/30-blog-draft-daddy-2026.md. If a Yahoo dev app is ever
+registered, its redirect URI must use the NEW domain.
 
 ## Each August (seasonal runbook)
 
