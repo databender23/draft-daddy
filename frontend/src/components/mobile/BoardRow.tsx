@@ -113,6 +113,18 @@ export default function BoardRow({
     if (committed) onMine(player);
   }
 
+  /**
+   * `pointercancel` means the browser INVALIDATED the sequence — a second
+   * finger landed, a system gesture took over, or the scroll was reclaimed
+   * mid-drag. That is the strongest possible abort signal, so it must reset
+   * without committing even when travel is already past the threshold;
+   * routing it through `onPointerUp` would draft a player out of a gesture the
+   * user experienced as a scroll (FINAL DECISION 1: abortable).
+   */
+  function onPointerCancel() {
+    reset();
+  }
+
   const posRank = player.pos_rank === null ? null : `${player.pos}${Math.round(player.pos_rank)}`;
   const adpDiff = player.adp_diff;
   const showAdp = adpDiff !== null && Math.abs(adpDiff) >= ADP_PILL_AT;
@@ -128,7 +140,7 @@ export default function BoardRow({
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
-        onPointerCancel={onPointerUp}
+        onPointerCancel={onPointerCancel}
         onClick={() => {
           if (swiped.current) return;
           onOpen(player);

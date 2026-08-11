@@ -427,12 +427,22 @@
   }
 
   /* Fix 3: at bottom 22px the toast sits underneath the dock, which would make
-     undo — the safety net for a one-tap destructive action — invisible. */
+     undo — the safety net for a one-tap destructive action — invisible.
+
+     z-index likewise: the base 40 clears the dock (30) but loses to the sheet
+     layer (60) and the opaque full-screen search overlay (70) — and BOTH of
+     those surfaces deliberately stay open across a removal (§4: "the overlay
+     keeps focus and the keyboard up, and the toast renders above the
+     keyboard"), so undo would be dimmed by the scrim or painted over entirely
+     on exactly the paths that fire it most. §9 risk 10 makes toast
+     reachability the pre-ship gate, so the toast owns the top of the stack.
+     `.toast`'s own `bottom` is lifted past the keyboard inline by Toast.tsx. */
   .toast {
     bottom: calc(56px + env(safe-area-inset-bottom) + 12px);
     left: 8px;
     right: 8px;
     transform: none;
+    z-index: 80;
   }
 
   .toast .btn {

@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { useIsMobile } from '../hooks/useIsMobile';
+import { useKeyboardInset } from '../hooks/useKeyboardInset';
 import type { Player } from '../types';
 
 export interface ToastState {
@@ -24,6 +25,7 @@ const TOAST_MS_MOBILE = 8000;
 
 export default function Toast({ toast, onUndo, onDismiss }: Props) {
   const isMobile = useIsMobile();
+  const inset = useKeyboardInset();
   // App passes a fresh `onDismiss` identity every render, so listing it here
   // cleared and restarted the timer on every App render — sync polls, the
   // `now` interval, any state change. The dismissal window was not 5s, it was
@@ -42,8 +44,20 @@ export default function Toast({ toast, onUndo, onDismiss }: Props) {
   }, [toast, isMobile]);
 
   if (!toast) return null;
+
+  // The search overlay is the fastest removal path and it keeps the keyboard
+  // up across the removal by design (§4), but iOS Safari does not shrink the
+  // layout viewport for the keyboard — so the CSS `bottom` (dock + safe area)
+  // lands the toast *behind* the keys. Lift it by the measured occlusion.
+  // Mobile-only and only while a keyboard is actually up, so mobile.css owns
+  // the resting position and desktop is untouched.
+  const lift =
+    isMobile && inset > 0
+      ? { bottom: `calc(56px + env(safe-area-inset-bottom) + 12px + ${inset}px)` }
+      : undefined;
+
   return (
-    <div className="toast" role="status">
+    <div className="toast" role="status" style={lift}>
       <span>
         {toast.mine ? 'Drafted to your roster:' : 'Removed:'} <strong>{toast.player.name}</strong>
       </span>

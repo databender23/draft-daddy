@@ -13,6 +13,7 @@ import type { PosFill } from './mobile/ChipRail';
 import { sortLabelFor } from './mobile/SortSheet';
 import type { Sheets } from '../hooks/useSheets';
 import type { SortKey, SortState } from '../lib/board';
+import { matchesSearch, sortPlayers } from '../lib/board';
 import type { TeamMap } from '../lib/context';
 import { buildRoster } from '../lib/roster';
 import type { Suggestion } from '../lib/suggest';
@@ -171,13 +172,22 @@ export default function DraftPage({
   const sortLabel = sortLabelFor(sort.key);
   const fill = useMemo(() => posFill(myPlayers, rosterConfig), [myPlayers, rosterConfig]);
 
-  // The search overlay commits on `results[0]`, so it must never be handed a
-  // player who is already off the board — `rows` still contains them whenever
-  // `showDrafted` is on.
-  const searchResults = useMemo(
-    () => rows.filter((player) => !draftedIds.has(player.id)),
-    [rows, draftedIds],
-  );
+  // The overlay searches the WHOLE undrafted pool, not `rows`. `rows` is App's
+  // `visible`, which drops anything failing the rail's position filter or the
+  // `★` watch-only chip *before* matchesSearch runs — and the overlay is a
+  // full-screen surface pinned over the rail, so that filter is invisible at
+  // the moment it would bite ("No players match" for a player who is on the
+  // board). §4 calls this the fastest manual-removal path in the app; it may
+  // not depend on rail state the user cannot see. `undrafted` also guarantees
+  // the confirm bar's `results[0]` is never someone already off the board,
+  // which `rows` does not when `showDrafted` is on.
+  const searchResults = useMemo(() => {
+    const query = search.trim();
+    return sortPlayers(
+      undrafted.filter((player) => matchesSearch(player, query)),
+      sort,
+    );
+  }, [undrafted, search, sort]);
 
   return (
     <>
