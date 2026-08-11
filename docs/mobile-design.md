@@ -7,9 +7,14 @@
 
 ## FINAL DECISIONS (override the body where they conflict)
 
-1. **Swipe-right-for-MINE is DEFERRED — do not implement.** No swipe gestures in this build.
-   Rows use `touch-action: pan-y` and plain taps only. Every §5 row mentioning swipe is void;
-   "My pick" is served by the Player-sheet footer button and the My Pick sheet (2 taps each).
+1. **Swipe-right-for-MINE is IN SCOPE** (user call, 2026-08-10). Exactly ONE swipe direction
+   exists in the whole design: row swipe RIGHT = MINE (`draftPlayer(p, true)`). Swipe-left does
+   nothing. Implementation MUST follow §5's arbitration rules verbatim: `touch-action: pan-y`
+   on rows; lock horizontal only after 10px travel with >2:1 dx:dy; ignore touches starting
+   within 20px of the left edge (iOS back-swipe); ~30% row width to commit, abortable on
+   release before threshold; underlay `--accent` bg + `--on-accent` `MINE` label. The swipe is
+   an accelerator, never the only path — the Player-sheet footer and My Pick sheet remain the
+   guaranteed routes, so the gesture can be deleted later at zero capability loss.
 2. **Search overlay: keyboard "Go" and the confirm bar share ONE handler.** While the overlay
    is open, the inline `onEnter` path is not used; Go triggers exactly the confirm bar's
    ✕ Remove action on the top match. After firing, the query clears (existing `draftPlayer`
@@ -30,10 +35,10 @@
 10. **PWA / manifest: out of scope.**
 11. **`theme-color` meta follows the theme toggle: IN scope** — set it in `lib/theme.ts`'s
     apply path and keep the pre-paint script consistent.
-12. **Implementation order:** everything in one build EXCEPT swipe (decision 1): the four prep
-    commits, the fix list, app bar, chip rail, BoardRow list + tier dividers, dock (4 slots),
+12. **Implementation order:** everything in one build: the four prep commits, the fix list,
+    app bar, chip rail, BoardRow list + tier dividers + swipe-right MINE, dock (4 slots),
     all sheets (Player, My Pick, Search, Sort/Board-options, Menu, Sync, Roster, Removed),
-    suggested strip + auto-hide, Help-page gesture section.
+    suggested strip + auto-hide, Help-page gesture section (which must document the swipe).
 
 ---
 
@@ -277,9 +282,8 @@ Existing `.page` styles, reached from the Menu sheet. `padding: 20px 16px calc(5
 | # | Action | Freq / draft | Gesture | Taps | Handler |
 |---|---|---|---|---|---|
 | 1 | **Someone else took them** | ~176 | Row's right-edge **✕**, 48×48 | **1** | `draftPlayer(p, false)` — explicit, no modifier read |
-| 2 | Same, power path | — | *(swipe DEFERRED per FINAL DECISION 1 — no swipe gestures in this build)* | — | — |
-| 3 | Same, by name | ~40 of the 176 | Dock **🔎** → type 3 letters → keyboard **Go**, or tap **✕ Remove** on the confirm bar (one shared handler, see FINAL DECISION 2) | ~3 keys + 1 | confirm-bar action |
-| 4 | **My pick** — accelerator | — | *(swipe DEFERRED per FINAL DECISION 1)* | — | — |
+| 2 | Same, by name | ~40 of the 176 | Dock **🔎** → type 3 letters → keyboard **Go**, or tap **✕ Remove** on the confirm bar (one shared handler, see FINAL DECISION 2) | ~3 keys + 1 | confirm-bar action |
+| 4 | **My pick** — accelerator | ~16 | **Swipe row right past ~30%**, release (rules in FINAL DECISION 1 + below) | 1 gesture | `draftPlayer(p, true)` |
 | 5 | **My pick** — guaranteed | ~16 | Tap row → Player sheet → footer **Mine** (48px) | **2** | `draftPlayer(p, true)` |
 | 6 | **My pick** — on the clock | ~16 | Dock **MY PICK** → My Pick sheet → **Mine** on the suggestion or a Best Available line | **2** | `draftPlayer(p, true)` |
 | 7 | Read player context | many | Tap anywhere on the row except ✕ | 1 | `buildTooltip()` → Player sheet |
