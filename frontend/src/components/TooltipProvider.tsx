@@ -16,6 +16,13 @@ import PlayerTooltip from './PlayerTooltip';
 
 /** Long enough that skimming the board never flashes cards, short enough to feel instant. */
 const OPEN_DELAY = 250;
+/**
+ * Touch devices have no hover, and `.ptip` is `pointer-events: none` — so a
+ * card opened by a tap can never be dismissed by tapping it. The guard has to
+ * live here rather than on the row: `PlayerName` calls show() from onFocus,
+ * and tapping a row body focuses that span on iOS.
+ */
+const NO_HOVER = '(hover: none)';
 const TIP_WIDTH = 620;
 const TIP_EST_HEIGHT = 230;
 const GAP = 8;
@@ -62,6 +69,7 @@ export default function TooltipProvider({ teams, byeCounts, children }: Props) {
 
   const show = useCallback(
     (player: Player, rect: DOMRect, pointerX?: number, immediate = false) => {
+      if (window.matchMedia(NO_HOVER).matches) return;
       const content = buildTooltip(player, teams[player.team], byeCounts);
       clearTimer();
       if (!content) {
